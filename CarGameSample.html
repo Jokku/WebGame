@@ -5,6 +5,7 @@
     <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
 <style>
 body
             {
@@ -32,6 +33,7 @@ body
 </head>
 <body onload="init();">
     <h1 id="testData" hidden="hidden">False</h1>
+
 <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
 
@@ -49,17 +51,38 @@ body
         var ball;
         var myObstacle;
 
+        ///////////////////////////////Varibles For Score
+        var score = 0;
+        var lives = 3;
+        var scoreText;
+        var HighScore = 0;
+//////////////////////////////////////////////////////////////////////////
+
         var keyboardMoveRightAnim = true;
 
         var spriteSheet;
         var grant;
         var bool_keyDown = false;
 
+        //Testing Gravity
+        gravity = 20;
+
         function tick()
         {
 
           stage.update();
+        
+          //Collision and gravity testing
+          grant.y = grant.y +gravity;
 
+        var collision;
+        collision = tempPlat10.y;
+        // Here is the problem right here!
+
+       
+
+            
+            
             if(keyboardSpace)
             {
                 var a= knightTemplate.y;
@@ -156,13 +179,68 @@ body
                 
             }
 
+            //tempPlat10.alpha = 0.2;
+            
+            var pt = grant.localToLocal(0,128,tempPlat10);
+            var pt1 = grant.localToLocal(0,128,tempPlat11); 
+            var pt2 = grant.localToLocal(0,128,tempPlat12); 
+            var pt3 = grant.localToLocal(0,128,tempPlat13);
+            var pt4 = grant.localToLocal(0,128,tempPlat14);
+
+            
+
+            var pt5 = grant.localToLocal(0,128,tempPlat17);
+            var pt6 = grant.localToLocal(0,128,tempPlat18);
+
+            var pt7 = grant.localToLocal(0,128,ball);
+            var pt8 = grant.localToLocal(0,128,tempPlat2);
+            var pt9 = grant.localToLocal(0,128,tempPlat3);
+
+            if (tempPlat10.hitTest(pt.x, pt.y)||tempPlat11.hitTest(pt1.x, pt1.y)||tempPlat12.hitTest(pt2.x, pt2.y)||
+            tempPlat13.hitTest(pt3.x, pt3.y)||tempPlat14.hitTest(pt4.x, pt4.y)) 
+            { 
+                //tempPlat10.alpha = 1;
+                //if (grant.y + 128 >= collision) {
+                    grant.y = tempPlat10.y - 128;
+                // }
+            }
+
+            if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
+            {
+                grant.y = tempPlat17.y - 128;
+            }
+
+            if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
+            {
+                grant.y = tempPlat2.y - 128;
+            }
+
         }
 
  function init()
  {
      //CallLoader Bar
    // initLoader()
+   
     ////////////
+
+
+    ///////////////////////////////This par is for save the store in the localstore of the browser
+    /*if(typeof(Storage) !=="undefined")
+            {
+                if(localStorage.HighScore==undefined)
+                {
+                    localStorage.HighScore = 0;
+                }
+                HighScore = localStorage.HighScore;
+
+            }
+            else
+            {
+                HighScore = 0;
+
+            }*/
+//////////////////////////////////////////////
 
 
      stage = new createjs.Stage("testCanvas"); 
@@ -182,6 +260,8 @@ body
 
      obstacle();
      crearimage();
+
+     crearScoreText();
   
 
      stage.update();
@@ -410,7 +490,7 @@ body
 
 
         stage.addChild(ball, tempPlat2, tempPlat3, tempPlat4, tempPlat5, tempPlat6, tempPlat7, tempPlat8, tempPlat9,
-        tempPlat10, tempPlat11,tempPlat12,tempPlat13,tempPlat14, tempPlat15,tempPlat16, tempPlat17,tempPlat18, knightTemplate);
+        tempPlat10, tempPlat11,tempPlat12,tempPlat13,tempPlat14, tempPlat15,tempPlat16, tempPlat17,tempPlat18);
 
          //Loop for Water
          var xVal =0;
@@ -574,12 +654,41 @@ body
         "animations": {
             sit: [1, 1, "sit"],
             run: [0, 3, "run"],
-            jump: [0, 0, "run"]
+            jump: [0, 0, "sit"]
         }
     });
 
 
 }
+
+
+///////////////////////////////////////////these method are for the Score and text of lives
+
+function crearScoreText()
+        {
+            scoreText = new createjs.Text("", "50px Arial", "#423425");
+            scoreText.y = stage.canvas.height -900;
+            scoreText.x = stage.canvas.width -900;
+            stage.addChild(scoreText);
+            console.log("fsfs");
+            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+        }
+
+        function addToScore(points)
+        {
+            score += points;
+            updateStatusLine();
+
+        }
+        //function to show score
+        function updateStatusLine()
+        {
+            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+
+        }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
     ///Loader Ends///
 
