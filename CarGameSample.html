@@ -4,6 +4,7 @@
 <title></title>
     <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
 body
             {
@@ -30,7 +31,8 @@ body
 </style>
 </head>
 <body onload="init();">
-<canvas id="testCanvas" width="1500px" height="800px"></canvas>
+    <h1 id="testData" hidden="hidden">False</h1>
+<canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
 
  const BALL_RADIOUS = 20;
@@ -43,64 +45,114 @@ body
         var keyboardMoveRight = false;
         var keyboardMoveDown = false;
         var keyboardMoveUp = false;
+        var keyboardSpace = false;
         var ball;
         var myObstacle;
 
-        
+        var keyboardMoveRightAnim = true;
+
+        var spriteSheet;
+        var grant;
+        var bool_keyDown = false;
 
         function tick()
         {
 
           stage.update();
 
+            if(keyboardSpace)
+            {
+                var a= knightTemplate.y;
+                createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
+
+                createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
+            }
 
 
             if(keyboardMoveLeft)
             {
   
-             ball.x -= 20;
+                knightTemplate.x -= 20;
 
+                grant.scaleX = -1;
+
+                grant.x = grant.x -10;
+                
             }
+
+
+            if(!keyboardMoveRight)
+            {
+                
+                //grant.gotoAndPlay(run);
+                //grant = new createjs.Sprite(spriteSheet, "run");
+                //grant.x = stage.canvas.width / 2;
+			    //grant.y = 200;
+			    //stage.addChild(grant);
+
+                //grant = new createjs.Sprite(spriteSheet);
+		        
+                //grant.gotoAndPlay("run");
+                //grant.gotoAndPlay("sit");
+			    //stage.update();
+
+                //grant.SpriteSheet(SpriteSheet,"run");
+                
+            }
+
             if(keyboardMoveRight)
             {
-            
-             ball.x += 20;
 
+                grant.scaleX = 1;
+
+                //grant.gotoAndPlay("run");
+                knightTemplate.x += 20;
+                grant.x = grant.x +10;
+                //grant.gotoAndPlay("run");
+                //grant.gotoAndPlay(run);
+               // grant = new createjs.Sprite(spriteSheet, "sit");
+                //grant.x = stage.canvas.width / 2;
+			    //grant.y = 200;
+			    //stage.addChild(grant);
+               // grant.gotoAndStop("sit");
+               
+			    //stage.update();
             }
+
             if(keyboardMoveUp)
             {
             
-             ball.y -= 20;
+                knightTemplate.y -= 20;
 
             }
             if(keyboardMoveDown)
             {
             
-             ball.y += 20;
+                knightTemplate.y += 20;
 
             }
 
 
-            if(ball.x<-5)
+            if(knightTemplate.x<-5)
             {
 
-                ball.x = -5;
+                knightTemplate.x = -5;
             }
-            if(ball.x>stage.canvas.width - BALL_RADIOUS*5)
+            if(knightTemplate.x>stage.canvas.width - BALL_RADIOUS*5)
             {
 
-                ball.x = stage.canvas.width - BALL_RADIOUS*5;
+                knightTemplate.x = stage.canvas.width - BALL_RADIOUS*5;
             }
 
 
-            if(ball.y>stage.canvas.height - BALL_RADIOUS*2)
+            if(knightTemplate.y>stage.canvas.height - BALL_RADIOUS*2)
             {
 
-                ball.y = stage.canvas.height - BALL_RADIOUS*2;
+                knightTemplate.y = stage.canvas.height - BALL_RADIOUS*2;
             }
-            if(ball.y<0 )
+            if(knightTemplate.y<0 )
             {
-            ball.y= 0;
+                knightTemplate.y= 0;
                 
             }
 
@@ -114,20 +166,36 @@ body
 
 
      stage = new createjs.Stage("testCanvas"); 
-     createjs.Touch.enable(stage);
-     createjs.Ticker.setFPS(60);
+     knightimage();   
+
+     grant = new createjs.Sprite(spriteSheet, "sit");
+     grant.x = 230;
+     grant.y = 155;
+     stage.addChild(grant);
+
+
+     //createjs.Touch.enable(stage);
+     createjs.Ticker.setFPS(10);
      createjs.Ticker.addEventListener("tick", tick);
- 
+     
+     //stage.addEventListener("stagemousedown", handleJumpStart);
+
      obstacle();
      crearimage();
   
 
      stage.update();
      window.onkeyup = keyUpHandler;
-              window.onkeydown = keyDownHandler;
+     window.onkeydown = keyDownHandler;
+     window.onkeypress = keyPressHandler;
          
-              stage.canvas.height =window.innerHeight;
+     stage.canvas.height =window.innerHeight;
  }
+
+ function handleJumpStart() {
+		grant = new createjs.Sprite(spriteSheet);
+		grant.gotoAndPlay("jump");
+	}
 
 
  function obstacle()
@@ -154,8 +222,8 @@ body
  }
     
 
-        function crearimage()
-        {
+    function crearimage()
+    {
 
         var platform1 = new Image();
         platform1.src = 'img/jungle_pack_19.png';
@@ -181,12 +249,31 @@ body
         var platform8 = new Image();
         platform8.src = 'img/jungle_pack_35.png';
 
+        var platform9 = new Image();
+        platform9.src = 'img/jungle_pack_36.png';
+
+        var platform10 = new Image();
+        platform10.src = 'img/jungle_pack_37.png';
+
+        var platform11 = new Image();
+        platform11.src = 'img/jungle_pack_03.png';
+
         var water = new Image();
         water.src = 'img/jungle_pack_52.png';
+
+        var knight = new Image();
+        knight.src = 'img/Knight/Knight1n.png';
+
+      
 
         ball = new createjs.Bitmap(platform1);
         ball.x = 200;
         ball.y = 300;
+
+        knightTemplate = new createjs.Bitmap(knight);
+        knightTemplate.x = 220;
+        knightTemplate.y = ball.y - 100;
+
 
         tempPlat2 = new createjs.Bitmap(platform2);
         tempPlat2.x = ball.x+128;
@@ -220,17 +307,89 @@ body
         tempPlat9.x = tempPlat8.x;
         tempPlat9.y = tempPlat8.y + 128;
         
-        //Loop for Water
-        var xVal =0;
-        for(i=0; i<12;i++)
-        {
-            tempWater = new createjs.Bitmap(water);
-            tempWater.x = xVal;
-            tempWater.y = 820;
-            stage.addChild(tempWater);
-            xVal=xVal+128;
-        }
+        tempPlat10 = new createjs.Bitmap(platform9);
+        tempPlat10.x = 128;
+        tempPlat10.y = 800;
+        tempPlat11 = new createjs.Bitmap(platform7);
+        tempPlat11.x = tempPlat10.x+128;
+        tempPlat11.y = 800;
+        tempPlat12 = new createjs.Bitmap(platform7);
+        tempPlat12.x = tempPlat11.x+128;
+        tempPlat12.y = 800;
+        tempPlat13 = new createjs.Bitmap(platform7);
+        tempPlat13.x = tempPlat12.x+128;
+        tempPlat13.y = 800;
+        tempPlat14 = new createjs.Bitmap(platform10);
+        tempPlat14.x = tempPlat13.x+128;
+        tempPlat14.y = 800;
         
+        tempPlat15 = new createjs.Bitmap(platform7);
+        tempPlat15.x = tempPlat7.x+128;
+        tempPlat15.y = 300;
+        tempPlat16 = new createjs.Bitmap(platform7);
+        tempPlat16.x = tempPlat15.x+128;
+        tempPlat16.y = 300;
+
+        tempPlat17 = new createjs.Bitmap(platform11);
+        tempPlat17.x = tempPlat7.x-256;
+        tempPlat17.y = 575; 
+        tempPlat18 = new createjs.Bitmap(platform7);
+        tempPlat18.x = tempPlat7.x-128;
+        tempPlat18.y = 575; 
+
+
+        //Loop for platforms
+        var xVal =tempPlat15.x;
+        var yVal=300;
+        for(i=0; i<6;i++)
+        {
+            tempWater = new createjs.Bitmap(platform8);
+            tempWater.x = xVal;
+            tempWater.y = yVal;
+            stage.addChild(tempWater);
+            yVal = yVal+128;
+        }
+        var xVal =tempPlat16.x;
+        var yVal=300;
+        for(i=0; i<6;i++)
+        {
+            tempWater = new createjs.Bitmap(platform8);
+            tempWater.x = xVal;
+            tempWater.y = yVal;
+            stage.addChild(tempWater);
+            yVal = yVal+128;
+        }
+        var xVal =tempPlat6.x+128;
+        var yVal=300;
+        for(i=0; i<6;i++)
+        {
+            tempWater = new createjs.Bitmap(platform8);
+            tempWater.x = xVal;
+            tempWater.y = yVal;
+            stage.addChild(tempWater);
+            yVal = yVal+128;
+        }
+        var xVal =tempPlat7.x-128;
+        var yVal=575;
+        for(i=0; i<6;i++)
+        {
+            tempWater = new createjs.Bitmap(platform8);
+            tempWater.x = xVal;
+            tempWater.y = yVal;
+            stage.addChild(tempWater);
+            yVal = yVal+128;
+        }
+        var xVal =tempPlat7.x-256;
+        var yVal=550+128;
+        for(i=0; i<6;i++)
+        {
+            tempWater = new createjs.Bitmap(platform8);
+            tempWater.x = xVal;
+            tempWater.y = yVal;
+            stage.addChild(tempWater);
+            yVal = yVal+128;
+        }
+
 
         //To play the background music
         //var audio = new Audio('M-GameBG.ogg');
@@ -250,17 +409,59 @@ body
 
 
 
-        stage.addChild(ball, tempPlat2, tempPlat3, tempPlat4, tempPlat5, tempPlat6, tempPlat7, tempPlat8, tempPlat9);
-        }
+        stage.addChild(ball, tempPlat2, tempPlat3, tempPlat4, tempPlat5, tempPlat6, tempPlat7, tempPlat8, tempPlat9,
+        tempPlat10, tempPlat11,tempPlat12,tempPlat13,tempPlat14, tempPlat15,tempPlat16, tempPlat17,tempPlat18, knightTemplate);
 
-         function keyDownHandler(e)
+         //Loop for Water
+         var xVal =0;
+        for(i=0; i<12;i++)
+        {
+            tempWater = new createjs.Bitmap(water);
+            tempWater.x = xVal;
+            tempWater.y = 840;
+            stage.addChild(tempWater);
+            xVal=xVal+128;
+        }
+    }
+
+       
+        function keyDownHandler(e)
         {
          switch(e.keyCode)
          {
-          case KEYCODE_LEFT: keyboardMoveLeft = true; break;
-          case KEYCODE_RIGHT: keyboardMoveRight = true; break;
+          case KEYCODE_LEFT:
+          {
+            keyboardMoveLeft = true;
+            if(document.getElementById("testData").innerHTML == "False")
+            {
+                grant.gotoAndPlay("run");
+            }
+            document.getElementById("testData").innerHTML = "True"; 
+            break;
+          }
+          case KEYCODE_RIGHT:
+          {
+            
+            keyboardMoveRight = true;
+            if(document.getElementById("testData").innerHTML == "False")
+            {
+                grant.gotoAndPlay("run");
+            }
+            document.getElementById("testData").innerHTML = "True"; 
+            break;
+
+          } 
           case KEYCODE_UP: keyboardMoveUp = true; break;
           case KEYCODE_DOWN: keyboardMoveDown = true; break;
+          case SPACEBAR: 
+          {
+              keyboardSpace = true;
+              grant.gotoAndPlay("jump");  
+              break;
+          }
+
+          //foranim
+          case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
          }
         }
 
@@ -270,11 +471,32 @@ body
   switch(e.keyCode)
          {
 
-          case KEYCODE_LEFT: keyboardMoveLeft = false; break;
-          case KEYCODE_RIGHT: keyboardMoveRight = false; break;
+          case KEYCODE_LEFT: 
+          {
+              keyboardMoveLeft = false;
+              if(document.getElementById("testData").innerHTML == "True")
+              {
+                grant.gotoAndPlay("sit");
+              }
+              document.getElementById("testData").innerHTML = "False";
+              break;
+          }
+          case KEYCODE_RIGHT: 
+          {
+             
+              keyboardMoveRight = false; 
+              if(document.getElementById("testData").innerHTML == "True")
+              {
+                grant.gotoAndPlay("sit");
+              }
+              document.getElementById("testData").innerHTML = "False";
+              break;
+          }
           case KEYCODE_UP: keyboardMoveUp = false; break;
           case KEYCODE_DOWN: keyboardMoveDown = false; break;
-          
+          case SPACEBAR: keyboardSpace = false; break;
+          //foranim
+          case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
          }          
          }
 
@@ -329,7 +551,39 @@ body
         stage.update();
     }
 
+    // function createKnight()
+    //     {
+
+    //        knight = new Image();
+    //        knight.src = 'img/Knight/Knight1n.png';
+    //        var bitmap = new createjs.Bitmap(knight);
+    //        knight.x = 500;
+    //        knight.y = 0;
+    //        stage.addChild(bitmap);
+
+    //     }
+
+
+        function knightimage(){
+
+	
+        spriteSheet = new createjs.SpriteSheet({
+        framerate: 5,
+        "images": ["_assets/art/prueba4.2.png"],
+        "frames": {"regX": 75, "height": 146, "regY": 0, "width": 116,"spacing":2, "count": 100},
+        "animations": {
+            sit: [1, 1, "sit"],
+            run: [0, 3, "run"],
+            jump: [0, 0, "run"]
+        }
+    });
+
+
+}
+
     ///Loader Ends///
+
+
 
 </script>
 </body>
