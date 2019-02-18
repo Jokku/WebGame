@@ -79,9 +79,17 @@ body
         collision = tempPlat10.y;
         // Here is the problem right here!
 
-       
+       console.log(grant.y);
 
-            
+/////////////////////////////////Discount lives if knight Fall
+       		if(grant.y > 900){
+
+       			lives -= 1;
+       			init();
+
+       		}
+//////////////////////////////////////////////////////////////// 
+
             
             if(keyboardSpace)
             {
@@ -90,7 +98,12 @@ body
 
                 createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
             }
-
+//////////////////////////Game Over
+			if(lives<=0){
+				location.href ="GameOver.html";
+				Lives = 3;
+			}
+/////////////////////////////////////
 
             if(keyboardMoveLeft)
             {
