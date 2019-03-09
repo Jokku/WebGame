@@ -1,326 +1,344 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title></title>
+    <title></title>
     <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
-<style>
-body
-            {
-                margin: 0;
-                padding:15px;
-                background-color:lightslategray;
-            }
-            canvas
-            {
-                border: solid 2px #000;
-                background-color: #fff;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                padding-left: 0px;
-                padding-right: 0px;
-                background-image: url("img/bg_jungle.png");
-                background-repeat: no-repeat;
-                position: relative;
-                top: 50px;
-                background-size:120%;
-                max-height: 800px;
-            }
-</style>
+
+    <script src="coins.js"></script>
+
+    <!-- Linking the external style sheet -->
+    <link rel="stylesheet" type="text/css" href="_assets/css/Style.css" />
 </head>
+
+<!-- Body tag calls the init method wich initializes the stage -->
 <body onload="init();">
     <h1 id="testData" hidden="hidden">False</h1>
+    <canvas id="testCanvas" width="1500px" height="970px"></canvas>
+</body>
 
-<canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
+    var test = true;
+    const BALL_RADIOUS = 20;
+    const KEYCODE_LEFT = 37;
+    const KEYCODE_RIGHT = 39;
+    const KEYCODE_UP = 38;
+    const KEYCODE_DOWN = 40;
+    const SPACEBAR = 32;
+    var keyboardMoveLeft = false;
+    var keyboardMoveRight = false;
+    var keyboardMoveDown = false;
+    var keyboardMoveUp = false;
+    var keyboardSpace = false;
+    var ball;
+    var myObstacle;
 
- const BALL_RADIOUS = 20;
-  const KEYCODE_LEFT = 37;
-        const KEYCODE_RIGHT = 39;
-        const KEYCODE_UP = 38;
-        const KEYCODE_DOWN = 40;
-        const SPACEBAR = 32;
-        var keyboardMoveLeft = false;
-        var keyboardMoveRight = false;
-        var keyboardMoveDown = false;
-        var keyboardMoveUp = false;
-        var keyboardSpace = false;
-        var ball;
-        var myObstacle;
+    ///////////////////////////////Varibles For Score
+    var score = 0;
+    var lives = 3;
+    var scoreText;
+    var HighScore = 0;
+    //////////////////////////////////////////////////////////////////////////
 
-        ///////////////////////////////Varibles For Score
-        var score = 0;
-        var lives = 3;
-        var scoreText;
-        var HighScore = 0;
-//////////////////////////////////////////////////////////////////////////
+    var keyboardMoveRightAnim = true;
 
-        var keyboardMoveRightAnim = true;
+    var spriteSheet;
+    var grant;
+    var bool_keyDown = false;
 
-        var spriteSheet;
-        var grant;
-        var bool_keyDown = false;
+    //Testing Gravity
+    gravity = 20;
 
-        //Testing Gravity
-        gravity = 20;
+    function tick() {
 
-        function tick()
-        {
+        stage.update();
 
-          stage.update();
-        
-          //Collision and gravity testing
-          grant.y = grant.y +gravity;
+        //Collision and gravity testing
+        grant.y = grant.y + gravity;
 
         var collision;
         collision = tempPlat10.y;
         // Here is the problem right here!
 
-       console.log(grant.y);
+        console.log(grant.y);
 
-/////////////////////////////////Discount lives if knight Fall
-       		if(grant.y > 900){
-
-       			lives -= 1;
-       			init();
-
-       		}
-//////////////////////////////////////////////////////////////// 
-
-            
-            if(keyboardSpace)
-            {
-                var a= knightTemplate.y;
-                createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
-
-                createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
-            }
-//////////////////////////Game Over
-			if(lives<=0){
-				location.href ="GameOver.html";
-				Lives = 3;
-			}
-/////////////////////////////////////
-
-            if(keyboardMoveLeft)
-            {
-  
-                knightTemplate.x -= 20;
-
-                grant.scaleX = -1;
-
-                grant.x = grant.x -20;
-                
-            }
+        /////////////////////////////////Discount lives if knight Fall
+        if (grant.y > 900) 
+        {
+            lives -= 1;
+            init();
+        }
+        //////////////////////////////////////////////////////////////// 
 
 
-            if(!keyboardMoveRight)
-            {
-                
-                //grant.gotoAndPlay(run);
-                //grant = new createjs.Sprite(spriteSheet, "run");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
+        if (keyboardSpace) {
+            var a = knightTemplate.y;
+            createjs.Tween.get(knightTemplate).to({ y: 100 }, knightTemplate.y, createjs.Ease.sineIn).to({ y: ball.y - 100 }, 1000, createjs.Ease.sineOut);
 
-                //grant = new createjs.Sprite(spriteSheet);
-		        
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay("sit");
-			    //stage.update();
+            createjs.Tween.get(grant).to({ y: 50 }, grant.y, createjs.Ease.sineIn).to({ y: 155 }, 1000, createjs.Ease.sineOut);
+        }
+        //////////////////////////Game Over
+        if (lives <= 0) {
+            location.href = "GameOver.html";
+            Lives = 3;
+        }
+        /////////////////////////////////////
 
-                //grant.SpriteSheet(SpriteSheet,"run");
-                
-            }
+        if (keyboardMoveLeft) {
 
-            if(keyboardMoveRight)
-            {
+            knightTemplate.x -= 20;
 
-                grant.scaleX = 1;
+            grant.scaleX = -1;
 
-                //grant.gotoAndPlay("run");
-                knightTemplate.x += 20;
-                grant.x = grant.x +20;
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay(run);
-               // grant = new createjs.Sprite(spriteSheet, "sit");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
-               // grant.gotoAndStop("sit");
-               
-			    //stage.update();
-            }
-
-            if(keyboardMoveUp)
-            {
-            
-                knightTemplate.y -= 20;
-
-            }
-            if(keyboardMoveDown)
-            {
-            
-                knightTemplate.y += 20;
-
-            }
-
-
-            if(knightTemplate.x<-5)
-            {
-
-                knightTemplate.x = -5;
-            }
-            if(knightTemplate.x>stage.canvas.width - BALL_RADIOUS*5)
-            {
-
-                knightTemplate.x = stage.canvas.width - BALL_RADIOUS*5;
-            }
-
-
-            if(knightTemplate.y>stage.canvas.height - BALL_RADIOUS*2)
-            {
-
-                knightTemplate.y = stage.canvas.height - BALL_RADIOUS*2;
-            }
-            if(knightTemplate.y<0 )
-            {
-                knightTemplate.y= 0;
-                
-            }
-
-            //tempPlat10.alpha = 0.2;
-            
-            var pt = grant.localToLocal(0,128,tempPlat10);
-            var pt1 = grant.localToLocal(0,128,tempPlat11); 
-            var pt2 = grant.localToLocal(0,128,tempPlat12); 
-            var pt3 = grant.localToLocal(0,128,tempPlat13);
-            var pt4 = grant.localToLocal(0,128,tempPlat14);
-
-            
-
-            var pt5 = grant.localToLocal(0,128,tempPlat17);
-            var pt6 = grant.localToLocal(0,128,tempPlat18);
-
-            var pt7 = grant.localToLocal(0,128,ball);
-            var pt8 = grant.localToLocal(0,128,tempPlat2);
-            var pt9 = grant.localToLocal(0,128,tempPlat3);
-
-            if (tempPlat10.hitTest(pt.x, pt.y)||tempPlat11.hitTest(pt1.x, pt1.y)||tempPlat12.hitTest(pt2.x, pt2.y)||
-            tempPlat13.hitTest(pt3.x, pt3.y)||tempPlat14.hitTest(pt4.x, pt4.y)) 
-            { 
-                //tempPlat10.alpha = 1;
-                //if (grant.y + 128 >= collision) {
-                    grant.y = tempPlat10.y - 128;
-                // }
-            }
-
-            if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
-            {
-                grant.y = tempPlat17.y - 128;
-            }
-
-            if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
-            {
-                grant.y = tempPlat2.y - 128;
-            }
+            grant.x = grant.x - 20;
 
         }
 
- function init()
- {
-     //CallLoader Bar
-   // initLoader()
-   
-    ////////////
+
+        if (!keyboardMoveRight) {
+
+            //grant.gotoAndPlay(run);
+            //grant = new createjs.Sprite(spriteSheet, "run");
+            //grant.x = stage.canvas.width / 2;
+            //grant.y = 200;
+            //stage.addChild(grant);
+
+            //grant = new createjs.Sprite(spriteSheet);
+
+            //grant.gotoAndPlay("run");
+            //grant.gotoAndPlay("sit");
+            //stage.update();
+
+            //grant.SpriteSheet(SpriteSheet,"run");
+
+        }
+
+        if (keyboardMoveRight) {
+
+            grant.scaleX = 1;
+
+            //grant.gotoAndPlay("run");
+            knightTemplate.x += 20;
+            grant.x = grant.x + 20;
+            //grant.gotoAndPlay("run");
+            //grant.gotoAndPlay(run);
+            // grant = new createjs.Sprite(spriteSheet, "sit");
+            //grant.x = stage.canvas.width / 2;
+            //grant.y = 200;
+            //stage.addChild(grant);
+            // grant.gotoAndStop("sit");
+
+            //stage.update();
+        }
+
+        if (keyboardMoveUp) {
+
+            knightTemplate.y -= 20;
+
+        }
+        if (keyboardMoveDown) {
+
+            knightTemplate.y += 20;
+
+        }
 
 
-    ///////////////////////////////This par is for save the store in the localstore of the browser
-    /*if(typeof(Storage) !=="undefined")
+        if (knightTemplate.x < -5) {
+
+            knightTemplate.x = -5;
+        }
+        if (knightTemplate.x > stage.canvas.width - BALL_RADIOUS * 5) {
+
+            knightTemplate.x = stage.canvas.width - BALL_RADIOUS * 5;
+        }
+
+
+        if (knightTemplate.y > stage.canvas.height - BALL_RADIOUS * 2) {
+
+            knightTemplate.y = stage.canvas.height - BALL_RADIOUS * 2;
+        }
+        if (knightTemplate.y < 0) {
+            knightTemplate.y = 0;
+
+        }
+
+        //tempPlat10.alpha = 0.2;
+        
+        var pt = grant.localToLocal(0, 128, tempPlat10);
+        var pt1 = grant.localToLocal(0, 128, tempPlat11);
+        var pt2 = grant.localToLocal(0, 128, tempPlat12);
+        var pt3 = grant.localToLocal(0, 128, tempPlat13);
+        var pt4 = grant.localToLocal(0, 128, tempPlat14);
+
+
+
+        var pt5 = grant.localToLocal(0, 128, tempPlat17);
+        var pt6 = grant.localToLocal(0, 128, tempPlat18);
+
+        var pt7 = grant.localToLocal(0, 128, ball);
+        var pt8 = grant.localToLocal(0, 128, tempPlat2);
+        var pt9 = grant.localToLocal(0, 128, tempPlat3);
+
+        
+
+
+        if (tempPlat10.hitTest(pt.x, pt.y) || tempPlat11.hitTest(pt1.x, pt1.y) || tempPlat12.hitTest(pt2.x, pt2.y) ||
+            tempPlat13.hitTest(pt3.x, pt3.y) || tempPlat14.hitTest(pt4.x, pt4.y)) {
+            //tempPlat10.alpha = 1;
+            //if (grant.y + 128 >= collision) {
+            grant.y = tempPlat10.y - 128;
+            // }
+        }
+
+        if (tempPlat17.hitTest(pt5.x, pt5.y) || tempPlat18.hitTest(pt6.x, pt6.y)) {
+            grant.y = tempPlat17.y - 128;
+        }
+
+        if (ball.hitTest(pt7.x, pt7.y) || tempPlat2.hitTest(pt8.x, pt8.y) || tempPlat3.hitTest(pt9.x, pt9.y)) {
+            grant.y = tempPlat2.y - 128;
+        }
+
+
+        
+        var pt10 = grant.localToLocal(0, 128, coin);
+
+        if(coin.hitTest(pt10.x, pt10.y))
+        {
+        
+            //coin.visible = false;
+            if(test)
             {
-                if(localStorage.HighScore==undefined)
-                {
-                    localStorage.HighScore = 0;
-                }
-                HighScore = localStorage.HighScore;
-
+                stage.removeChild(coin);
+                score = score + 10;
+                scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
             }
-            else
-            {
-                HighScore = 0;
 
-            }*/
-//////////////////////////////////////////////
+            test = false;
+            
 
-
-     stage = new createjs.Stage("testCanvas"); 
-     knightimage();   
-
-     grant = new createjs.Sprite(spriteSheet, "sit");
-     grant.x = 230;
-     grant.y = 155;
-     stage.addChild(grant);
+        }
+        test = true;
 
 
-     //createjs.Touch.enable(stage);
-     createjs.Ticker.setFPS(10);
-     createjs.Ticker.addEventListener("tick", tick);
-     
-     //stage.addEventListener("stagemousedown", handleJumpStart);
+    var pt11 = grant.localToLocal(0, 50, coin2);
 
-     obstacle();
-     crearimage();
-
-     crearScoreText();
-  
-
-     stage.update();
-     window.onkeyup = keyUpHandler;
-     window.onkeydown = keyDownHandler;
-     window.onkeypress = keyPressHandler;
-         
-     stage.canvas.height =window.innerHeight;
- }
-
- function handleJumpStart() {
-		grant = new createjs.Sprite(spriteSheet);
-		grant.gotoAndPlay("jump");
-	}
-
-
- function obstacle()
- {
-
- for(var i=100;i<=1000;i+=5)
- {
- for(var j=100;j<=1000;j+=200)
- {
- myObstacle = new createjs.Shape();
- myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
- myObstacle.x = i;
- myObstacle.y = j;
-   
-   //stage.addChild(myObstacle);
- } 
- }
- //myObstacle = new createjs.Shape();
- //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
- //myObstacle.x = 540;
- //myObstacle.y = 100;
-   //myObstacle = new component(10, 200, "green", 300, 120); 
-   //stage.addChild(myObstacle);
- }
-    
-
-    function crearimage()
+    if(coin2.hitTest(pt11.x, pt11.y))
     {
+        if(test)
+            {
+        stage.removeChild(coin2);
+        score = score + 10;
+        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
+            }
+            test = false;
+    }
+    test = true;
+
+
+        //document.getElementById("testData").hidden = true;
+
+    }
+
+    function init() {
+       
+        //CallLoader Bar
+        // initLoader()
+
+        ////////////
+
+
+        ///////////////////////////////This par is for save the store in the localstore of the browser
+        /*if(typeof(Storage) !=="undefined")
+                {
+                    if(localStorage.HighScore==undefined)
+                    {
+                        localStorage.HighScore = 0;
+                    }
+                    HighScore = localStorage.HighScore;
+    
+                }
+                else
+                {
+                    HighScore = 0;
+    
+                }*/
+        //////////////////////////////////////////////
+
+
+        stage = new createjs.Stage("testCanvas");
+        
+        knightimage();
+
+        grant = new createjs.Sprite(spriteSheet, "sit");
+        grant.x = 230;
+        grant.y = 155;
+        stage.addChild(grant);
+        
+
+
+        //createjs.Touch.enable(stage);
+        createjs.Ticker.setFPS(10);
+        createjs.Ticker.addEventListener("tick", tick);
+
+        //stage.addEventListener("stagemousedown", handleJumpStart);
+
+        obstacle();
+        crearimage();
+
+        crearScoreText();
+
+        
+
+        stage.update();
+        window.onkeyup = keyUpHandler;
+        window.onkeydown = keyDownHandler;
+        window.onkeypress = keyPressHandler;
+
+        stage.canvas.height = window.innerHeight;
+    }
+
+    function handleJumpStart() {
+        grant = new createjs.Sprite(spriteSheet);
+        grant.gotoAndPlay("jump");
+    }
+
+
+    function obstacle() {
+
+        for (var i = 100; i <= 1000; i += 5) {
+            for (var j = 100; j <= 1000; j += 200) {
+                myObstacle = new createjs.Shape();
+                myObstacle.graphics.beginFill("Red").drawCircle(50, 100, BALL_RADIOUS);
+                myObstacle.x = i;
+                myObstacle.y = j;
+
+                //stage.addChild(myObstacle);
+            }
+        }
+        //myObstacle = new createjs.Shape();
+        //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
+        //myObstacle.x = 540;
+        //myObstacle.y = 100;
+        //myObstacle = new component(10, 200, "green", 300, 120); 
+        //stage.addChild(myObstacle);
+    }
+
+
+    function crearimage() {
+
+        coin2 = new GreenCoin();
+        coin2.x = 500;
+        coin2.y = 250;
+        stage.addChild(coin2);
+
+        addCoins(1000,525);
 
         var platform1 = new Image();
         platform1.src = 'img/jungle_pack_19.png';
-        
+
         var platform2 = new Image();
         platform2.src = 'img/jungle_pack_13.png';
 
@@ -357,7 +375,7 @@ body
         var knight = new Image();
         knight.src = 'img/Knight/Knight1n.png';
 
-      
+
 
         ball = new createjs.Bitmap(platform1);
         ball.x = 200;
@@ -369,27 +387,27 @@ body
 
 
         tempPlat2 = new createjs.Bitmap(platform2);
-        tempPlat2.x = ball.x+128;
+        tempPlat2.x = ball.x + 128;
         tempPlat2.y = 300;
 
         tempPlat3 = new createjs.Bitmap(platform3);
-        tempPlat3.x = tempPlat2.x+128;
+        tempPlat3.x = tempPlat2.x + 128;
         tempPlat3.y = 300;
-        
+
         tempPlat4 = new createjs.Bitmap(platform4);
-        tempPlat4.x = ball.x+128;
+        tempPlat4.x = ball.x + 128;
         tempPlat4.y = 363;
 
         tempPlat5 = new createjs.Bitmap(platform5);
-        tempPlat5.x = tempPlat3.x+300;
+        tempPlat5.x = tempPlat3.x + 300;
         tempPlat5.y = 300;
 
         tempPlat6 = new createjs.Bitmap(platform6);
-        tempPlat6.x = tempPlat5.x+300;
+        tempPlat6.x = tempPlat5.x + 300;
         tempPlat6.y = 300;
 
         tempPlat7 = new createjs.Bitmap(platform7);
-        tempPlat7.x = tempPlat6.x+128;
+        tempPlat7.x = tempPlat6.x + 128;
         tempPlat7.y = 300;
 
         tempPlat8 = new createjs.Bitmap(platform8);
@@ -399,88 +417,83 @@ body
         tempPlat9 = new createjs.Bitmap(platform8);
         tempPlat9.x = tempPlat8.x;
         tempPlat9.y = tempPlat8.y + 128;
-        
+
         tempPlat10 = new createjs.Bitmap(platform9);
         tempPlat10.x = 128;
         tempPlat10.y = 800;
         tempPlat11 = new createjs.Bitmap(platform7);
-        tempPlat11.x = tempPlat10.x+128;
+        tempPlat11.x = tempPlat10.x + 128;
         tempPlat11.y = 800;
         tempPlat12 = new createjs.Bitmap(platform7);
-        tempPlat12.x = tempPlat11.x+128;
+        tempPlat12.x = tempPlat11.x + 128;
         tempPlat12.y = 800;
         tempPlat13 = new createjs.Bitmap(platform7);
-        tempPlat13.x = tempPlat12.x+128;
+        tempPlat13.x = tempPlat12.x + 128;
         tempPlat13.y = 800;
         tempPlat14 = new createjs.Bitmap(platform10);
-        tempPlat14.x = tempPlat13.x+128;
+        tempPlat14.x = tempPlat13.x + 128;
         tempPlat14.y = 800;
-        
+
         tempPlat15 = new createjs.Bitmap(platform7);
-        tempPlat15.x = tempPlat7.x+128;
+        tempPlat15.x = tempPlat7.x + 128;
         tempPlat15.y = 300;
         tempPlat16 = new createjs.Bitmap(platform7);
-        tempPlat16.x = tempPlat15.x+128;
+        tempPlat16.x = tempPlat15.x + 128;
         tempPlat16.y = 300;
 
         tempPlat17 = new createjs.Bitmap(platform11);
-        tempPlat17.x = tempPlat7.x-256;
-        tempPlat17.y = 575; 
+        tempPlat17.x = tempPlat7.x - 256;
+        tempPlat17.y = 575;
         tempPlat18 = new createjs.Bitmap(platform7);
-        tempPlat18.x = tempPlat7.x-128;
-        tempPlat18.y = 575; 
+        tempPlat18.x = tempPlat7.x - 128;
+        tempPlat18.y = 575;
 
 
         //Loop for platforms
-        var xVal =tempPlat15.x;
-        var yVal=300;
-        for(i=0; i<6;i++)
-        {
+        var xVal = tempPlat15.x;
+        var yVal = 300;
+        for (i = 0; i < 6; i++) {
             tempWater = new createjs.Bitmap(platform8);
             tempWater.x = xVal;
             tempWater.y = yVal;
             stage.addChild(tempWater);
-            yVal = yVal+128;
+            yVal = yVal + 128;
         }
-        var xVal =tempPlat16.x;
-        var yVal=300;
-        for(i=0; i<6;i++)
-        {
+        var xVal = tempPlat16.x;
+        var yVal = 300;
+        for (i = 0; i < 6; i++) {
             tempWater = new createjs.Bitmap(platform8);
             tempWater.x = xVal;
             tempWater.y = yVal;
             stage.addChild(tempWater);
-            yVal = yVal+128;
+            yVal = yVal + 128;
         }
-        var xVal =tempPlat6.x+128;
-        var yVal=300;
-        for(i=0; i<6;i++)
-        {
+        var xVal = tempPlat6.x + 128;
+        var yVal = 300;
+        for (i = 0; i < 6; i++) {
             tempWater = new createjs.Bitmap(platform8);
             tempWater.x = xVal;
             tempWater.y = yVal;
             stage.addChild(tempWater);
-            yVal = yVal+128;
+            yVal = yVal + 128;
         }
-        var xVal =tempPlat7.x-128;
-        var yVal=575;
-        for(i=0; i<6;i++)
-        {
+        var xVal = tempPlat7.x - 128;
+        var yVal = 575;
+        for (i = 0; i < 6; i++) {
             tempWater = new createjs.Bitmap(platform8);
             tempWater.x = xVal;
             tempWater.y = yVal;
             stage.addChild(tempWater);
-            yVal = yVal+128;
+            yVal = yVal + 128;
         }
-        var xVal =tempPlat7.x-256;
-        var yVal=550+128;
-        for(i=0; i<6;i++)
-        {
+        var xVal = tempPlat7.x - 256;
+        var yVal = 550 + 128;
+        for (i = 0; i < 6; i++) {
             tempWater = new createjs.Bitmap(platform8);
             tempWater.x = xVal;
             tempWater.y = yVal;
             stage.addChild(tempWater);
-            yVal = yVal+128;
+            yVal = yVal + 128;
         }
 
 
@@ -489,114 +502,105 @@ body
         //audio.play();
 
         // Create a single item to load.
-		src = "sound/M-GameBG.ogg";
+        src = "sound/M-GameBG.ogg";
 
-		createjs.Sound.alternateExtensions = ["mp3"];	// add other extensions to try loading if the src file extension is not supported
-		//createjs.Sound.onLoadComplete = playSound;  // add a callback for when load is completed
-        
+        createjs.Sound.alternateExtensions = ["mp3"];	// add other extensions to try loading if the src file extension is not supported
+        //createjs.Sound.onLoadComplete = playSound;  // add a callback for when load is completed
+
         createjs.Sound.addEventListener("fileload", playSound);
 
-        
+
         //soundInstance = createjs.Sound.play(src);  // start playing the sound we just loaded, storing the playing instance
-		createjs.Sound.registerSound(src);  // register sound, which preloads by default
+        createjs.Sound.registerSound(src);  // register sound, which preloads by default
 
 
 
         stage.addChild(ball, tempPlat2, tempPlat3, tempPlat4, tempPlat5, tempPlat6, tempPlat7, tempPlat8, tempPlat9,
-        tempPlat10, tempPlat11,tempPlat12,tempPlat13,tempPlat14, tempPlat15,tempPlat16, tempPlat17,tempPlat18);
+            tempPlat10, tempPlat11, tempPlat12, tempPlat13, tempPlat14, tempPlat15, tempPlat16, tempPlat17, tempPlat18);
 
-         //Loop for Water
-         var xVal =0;
-        for(i=0; i<12;i++)
-        {
+        //Loop for Water
+        var xVal = 0;
+        for (i = 0; i < 12; i++) {
             tempWater = new createjs.Bitmap(water);
             tempWater.x = xVal;
             tempWater.y = 840;
             stage.addChild(tempWater);
-            xVal=xVal+128;
+            xVal = xVal + 128;
         }
     }
 
-       
-        function keyDownHandler(e)
-        {
-         switch(e.keyCode)
-         {
-          case KEYCODE_LEFT:
-          {
-            keyboardMoveLeft = true;
-            if(document.getElementById("testData").innerHTML == "False")
-            {
-                grant.gotoAndPlay("run");
-            }
-            document.getElementById("testData").innerHTML = "True"; 
-            break;
-          }
-          case KEYCODE_RIGHT:
-          {
-            
-            keyboardMoveRight = true;
-            if(document.getElementById("testData").innerHTML == "False")
-            {
-                grant.gotoAndPlay("run");
-            }
-            document.getElementById("testData").innerHTML = "True"; 
-            break;
 
-          } 
-          case KEYCODE_UP: keyboardMoveUp = true; break;
-          case KEYCODE_DOWN: keyboardMoveDown = true; break;
-          case SPACEBAR: 
-          {
-              keyboardSpace = true;
-              grant.gotoAndPlay("jump");  
-              break;
-          }
+    function keyDownHandler(e) {
+        switch (e.keyCode) {
+            case KEYCODE_LEFT:
+                {
+                    keyboardMoveLeft = true;
+                    if (document.getElementById("testData").innerHTML == "False") {
+                        grant.gotoAndPlay("run");
+                    }
+                    document.getElementById("testData").innerHTML = "True";
+                    break;
+                }
+            case KEYCODE_RIGHT:
+                {
 
-          //foranim
-          case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
-         }
+                    keyboardMoveRight = true;
+                    if (document.getElementById("testData").innerHTML == "False") {
+                        grant.gotoAndPlay("run");
+                    }
+                    document.getElementById("testData").innerHTML = "True";
+                    break;
+
+                }
+            case KEYCODE_UP: keyboardMoveUp = true; break;
+            case KEYCODE_DOWN: keyboardMoveDown = true; break;
+            case SPACEBAR:
+                {
+                    keyboardSpace = true;
+                    grant.gotoAndPlay("jump");
+                    break;
+                }
+
+            //foranim
+            case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
         }
+    }
 
-         function keyUpHandler(e)
-         {
+    function keyUpHandler(e) {
 
-  switch(e.keyCode)
-         {
+        switch (e.keyCode) {
 
-          case KEYCODE_LEFT: 
-          {
-              keyboardMoveLeft = false;
-              if(document.getElementById("testData").innerHTML == "True")
-              {
-                grant.gotoAndPlay("sit");
-              }
-              document.getElementById("testData").innerHTML = "False";
-              break;
-          }
-          case KEYCODE_RIGHT: 
-          {
-             
-              keyboardMoveRight = false; 
-              if(document.getElementById("testData").innerHTML == "True")
-              {
-                grant.gotoAndPlay("sit");
-              }
-              document.getElementById("testData").innerHTML = "False";
-              break;
-          }
-          case KEYCODE_UP: keyboardMoveUp = false; break;
-          case KEYCODE_DOWN: keyboardMoveDown = false; break;
-          case SPACEBAR: keyboardSpace = false; break;
-          //foranim
-          case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
-         }          
-         }
+            case KEYCODE_LEFT:
+                {
+                    keyboardMoveLeft = false;
+                    if (document.getElementById("testData").innerHTML == "True") {
+                        grant.gotoAndPlay("sit");
+                    }
+                    document.getElementById("testData").innerHTML = "False";
+                    break;
+                }
+            case KEYCODE_RIGHT:
+                {
+
+                    keyboardMoveRight = false;
+                    if (document.getElementById("testData").innerHTML == "True") {
+                        grant.gotoAndPlay("sit");
+                    }
+                    document.getElementById("testData").innerHTML = "False";
+                    break;
+                }
+            case KEYCODE_UP: keyboardMoveUp = false; break;
+            case KEYCODE_DOWN: keyboardMoveDown = false; break;
+            case SPACEBAR: keyboardSpace = false; break;
+            //foranim
+            case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
+        }
+    }
 
 
     function playSound(event) {
-		soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
-	}
+        soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
+    }
 
 
 
@@ -657,56 +661,59 @@ body
     //     }
 
 
-        function knightimage(){
+    function knightimage() {
 
-	
+
         spriteSheet = new createjs.SpriteSheet({
-        framerate: 5,
-        "images": ["_assets/art/prueba4.2.png"],
-        "frames": {"regX": 75, "height": 146, "regY": 0, "width": 116,"spacing":2, "count": 100},
-        "animations": {
-            sit: [1, 1, "sit"],
-            run: [0, 3, "run"],
-            jump: [0, 0, "sit"]
-        }
-    });
+            framerate: 5,
+            "images": ["_assets/art/prueba4.2.png"],
+            "frames": { "regX": 75, "height": 146, "regY": 0, "width": 116, "spacing": 2, "count": 100 },
+            "animations": {
+                sit: [1, 1, "sit"],
+                run: [0, 3, "run"],
+                jump: [0, 0, "sit"]
+            }
+        });
 
 
-}
+    }
 
 
-///////////////////////////////////////////these method are for the Score and text of lives
+    ///////////////////////////////////////////these method are for the Score and text of lives
 
-function crearScoreText()
-        {
-            scoreText = new createjs.Text("", "50px Arial", "#423425");
-            scoreText.y = stage.canvas.height -900;
-            scoreText.x = stage.canvas.width -900;
-            stage.addChild(scoreText);
-            console.log("fsfs");
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
-        }
+    function crearScoreText() {
+        scoreText = new createjs.Text("", "50px Arial", "#423425");
+        scoreText.y = stage.canvas.height - 900;
+        scoreText.x = stage.canvas.width - 900;
+        stage.addChild(scoreText);
+        console.log("fsfs");
+        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
+    }
 
-        function addToScore(points)
-        {
-            score += points;
-            updateStatusLine();
+    function addToScore(points) {
+        score += points;
+        updateStatusLine();
 
-        }
-        //function to show score
-        function updateStatusLine()
-        {
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+    }
+    //function to show score
+    function updateStatusLine() {
+        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
 
-        }
+    }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///Loader Ends///
+///Loader Ends///
 
-
+//Method to add coin
+function addCoins(x, y) {
+        coin = new GreenCoin();
+        coin.x = x;
+        coin.y = y;
+        stage.addChild(coin);
+    }
 
 </script>
-</body>
+
 </html>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <title></title>
-    <script src="../lib/easeljs-0.7.1.min.js"></script>
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
     <script src="coins.js"></script>
 </head>
 
@@ -21,14 +21,10 @@
         addCoins();
     }
     function addCoins() {
-        var coin = new YellowCoin();
-        var coin2 = new GreenCoin();
-        var coin3 = new PinkCoin();
-        coin.y = coin2.y = coin3.y = 100;
-        coin.x = 100;
-        coin2.x = 200;
-        coin3.x = 300;
-        stage.addChild(coin, coin2, coin3);
+        var coin = new GreenCoin();
+        coin.x = 200;
+        coin.y = 100;
+        stage.addChild(coin);
     }
 </script>
 </html>
