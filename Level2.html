@@ -32,7 +32,8 @@ body
 </style>
 </head>
 <body onload="init();">
-    <h1 id="testData" hidden="hidden">False</h1>
+    <h1 id="testData" hidden></h1>
+    <h1 id="testCol"></h1>
 
 <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
@@ -194,11 +195,61 @@ body
 
             //tempPlat10.alpha = 0.2;
             
-             var pt = grant.localToLocal(0,128,tempPlat10);
-            var pt1 = grant.localToLocal(0,128,tempPlat11); 
-            var pt2 = grant.localToLocal(0,128,tempPlat12); 
-            var pt3 = grant.localToLocal(0,128,tempPlat13);
-            var pt4 = grant.localToLocal(0,128,tempPlat14);
+            var pt = grant.localToLocal(0,128,leftPlat1);
+            var pt1 = grant.localToLocal(0,128,leftPlat2); 
+            var pt2 = grant.localToLocal(0,128,leftPlat3); 
+            var pt3 = grant.localToLocal(0,128,leftPlat4);
+
+            if (leftPlat1.hitTest(pt.x, pt.y)||leftPlat2.hitTest(pt1.x, pt1.y)||leftPlat3.hitTest(pt2.x, pt2.y)||
+             leftPlat4.hitTest(pt3.x, pt3.y)) 
+            { 
+                grant.y = leftPlat1.y - 128;
+            }
+
+            var pt4 = grant.localToLocal(0,128,ball);
+            if (ball.hitTest(pt4.x, pt4.y))
+            {
+                grant.y = ball.y - 128;
+            }
+
+            var pt5 = grant.localToLocal(0,128,tempPlat2);
+            if (tempPlat2.hitTest(pt5.x, pt5.y))
+            {
+                grant.y = tempPlat2.y - 128;
+            }
+
+            var pt6 = grant.localToLocal(0,128,tempPlat3);
+            var pt7 = grant.localToLocal(0,128,tempPlat4);
+            if (tempPlat3.hitTest(pt6.x, pt6.y)||tempPlat4.hitTest(pt7.x, pt7.y))
+            {
+                grant.y = tempPlat3.y - 128;
+            }
+
+            var pt8 = grant.localToLocal(0,128,tempPlat5);
+            if (tempPlat5.hitTest(pt8.x, pt8.y))
+            {
+                grant.y = tempPlat5.y - 128;
+            }
+
+            var pt9 = grant.localToLocal(0,128,tempPlat9);
+            if (tempPlat9.hitTest(pt9.x, pt9.y))
+            {
+                grant.y = tempPlat9.y - 128;
+            }
+            
+            var pt10 = grant.localToLocal(0,128,tempPlat10);
+            var pt11 = grant.localToLocal(0,128,tempPlat6);
+            if (tempPlat10.hitTest(pt10.x, pt10.y)||(tempPlat6.hitTest(pt11.x, pt11.y)))
+            {
+                grant.y = tempPlat10.y - 128;
+            }
+            
+
+            
+
+            //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
+
+           /*  var pt4 = grant.localToLocal(0,128,tempPlat14);
 
             
 
@@ -207,18 +258,11 @@ body
 
             var pt7 = grant.localToLocal(0,128,ball);
             var pt8 = grant.localToLocal(0,128,tempPlat2);
-            var pt9 = grant.localToLocal(0,128,tempPlat3);
+            var pt9 = grant.localToLocal(0,128,tempPlat3); */
 
-             if (tempPlat10.hitTest(pt.x, pt.y)||tempPlat11.hitTest(pt1.x, pt1.y)||tempPlat12.hitTest(pt2.x, pt2.y)||
-            tempPlat13.hitTest(pt3.x, pt3.y)||tempPlat14.hitTest(pt4.x, pt4.y)) 
-            { 
-                //tempPlat10.alpha = 1;
-                //if (grant.y + 128 >= collision) {
-                    grant.y = tempPlat10.y - 128;
-                // }
-            }
+           
 
-            if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
+/*             if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
             {
                 grant.y = tempPlat17.y - 128;
             }
@@ -226,9 +270,11 @@ body
             if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
             {
                 grant.y = tempPlat2.y - 128;
-            }
+            } */
 
         }
+
+
 
  function init()
  {
@@ -263,6 +309,8 @@ body
      grant.x = 230;
      grant.y = 155;
      stage.addChild(grant);
+
+     //grant.setBounds(grant.x,grant.y,grant.width,grant.height);
 
 
      //createjs.Touch.enable(stage);
@@ -419,22 +467,34 @@ body
         knightTemplate.y = ball.y - 100;
 
 
+        leftPlat1 = new createjs.Bitmap(platJung05);
+        leftPlat1.x = 0;
+        leftPlat1.y = 800;
+        stage.addChild(leftPlat1);
+        leftPlat2 = new createjs.Bitmap(platJung05);
+        leftPlat2.x = leftPlat1.x + 128;
+        leftPlat2.y = 800;
+        stage.addChild(leftPlat2);
+        leftPlat3 = new createjs.Bitmap(platJung05);
+        leftPlat3.x = leftPlat2.x + 128;
+        leftPlat3.y = 800;
+        stage.addChild(leftPlat3);
+        leftPlat4 = new createjs.Bitmap(platJung05);
+        leftPlat4.x = leftPlat3.x + 128;
+        leftPlat4.y = 800;
+        stage.addChild(leftPlat4);
+
         
         // loop for ground 
         var xVal =0;
         for(i=0; i<4;i++)
         {
-            tempbase = new createjs.Bitmap(platJung05);
-            tempbase.x = xVal;
-            tempbase.y = 800;
-            stage.addChild(tempbase);
-            xVal=xVal+128;
-            for (j=0;j<1;j++){
-                tempbase2 = new createjs.Bitmap(platJung21);
-                tempbase2.x = tempbase.x;
-                tempbase2.y = tempbase.y +128;
-                stage.addChild(tempbase2);
-            }
+            
+            tempbase2 = new createjs.Bitmap(platJung21);
+            tempbase2.x = xVal;
+            tempbase2.y = 800 + 128;
+            stage.addChild(tempbase2);
+            xVal = xVal + 128;
         }
 
         tempTree1 = new createjs.Bitmap(plantJung66);
@@ -451,7 +511,7 @@ body
 
         tempPlat3 = new createjs.Bitmap(platJung36);
         tempPlat3.x = 800;
-        tempPlat3.y = tempbase.y;
+        tempPlat3.y = leftPlat1.y;
 
         tempPlat4 = new createjs.Bitmap(platJung37);
         tempPlat4.x = tempPlat3.x + 128;
@@ -489,6 +549,9 @@ body
                 yVal += 128;
             }
         }
+
+   
+
         tempPlat8 = new createjs.Bitmap(platJung21);
         tempPlat8.x = tempPlat6.x;
         tempPlat8.y = yVal + 128;
@@ -525,6 +588,9 @@ body
         tempPlat11 = new createjs.Bitmap(platJung38);
         tempPlat11.x = 350;
         tempPlat11.y = 300;
+        
+        //Set bounds for tempPlat11
+        //tempPlat11.setBounds(tempPlat11.x,tempPlat11.y,tempPlat11.width,tempPlat11.height);
 
         tempPlat12 = new createjs.Bitmap(platJung15);
         tempPlat12.x = tempPlat11.x + 128;

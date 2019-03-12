@@ -220,7 +220,6 @@
             
 
         }
-        test = true;
 
 
     var pt11 = grant.localToLocal(0, 50, coin2);
@@ -235,7 +234,6 @@
             }
             test = false;
     }
-    test = true;
 
 
         //document.getElementById("testData").hidden = true;
@@ -332,6 +330,8 @@
         coin2 = new GreenCoin();
         coin2.x = 500;
         coin2.y = 250;
+
+        if (test)
         stage.addChild(coin2);
 
         addCoins(1000,525);
@@ -711,6 +711,8 @@ function addCoins(x, y) {
         coin = new GreenCoin();
         coin.x = x;
         coin.y = y;
+        
+        if (test)
         stage.addChild(coin);
     }
 
