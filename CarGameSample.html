@@ -235,6 +235,12 @@
             test = false;
     }
 
+    var pt12 = grant.localToLocal(0, 128, finishSign);
+
+    if(finishSign.hitTest(pt12.x, pt12.y))
+    {
+        location.href = "Level2.html";
+    }
 
         //document.getElementById("testData").hidden = true;
 
@@ -272,8 +278,15 @@
 
         grant = new createjs.Sprite(spriteSheet, "sit");
         grant.x = 230;
-        grant.y = 155;
+        grant.y = 555;
         stage.addChild(grant);
+
+        var finish = new Image();
+        finish.src = 'images/Sign_2.png';
+        finishSign = new createjs.Bitmap(finish);
+        finishSign.x = 1430;
+        finishSign.y = 220;
+        stage.addChild(finishSign);
         
 
 
@@ -328,13 +341,13 @@
     function crearimage() {
 
         coin2 = new GreenCoin();
-        coin2.x = 500;
-        coin2.y = 250;
+        coin2.x = 1000;
+        coin2.y = 525;
 
         if (test)
         stage.addChild(coin2);
 
-        addCoins(1000,525);
+        addCoins(500 ,250);
 
         var platform1 = new Image();
         platform1.src = 'img/jungle_pack_19.png';
@@ -711,7 +724,7 @@ function addCoins(x, y) {
         coin = new GreenCoin();
         coin.x = x;
         coin.y = y;
-        
+
         if (test)
         stage.addChild(coin);
     }
