@@ -11,32 +11,7 @@
     <script src="coins.js"></script>
 
     <!-- Linking the external style sheet -->
-    <!-- <link rel="stylesheet" type="text/css" href="_assets/css/Style.css" /> -->
-    <style>
-    body
-            {   
-                margin: 0;
-                padding:15px;
-                background-color:lightslategray;     
-            }
-            
-            canvas
-            {
-                border: solid 2px #000;
-                background-color: #fff;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                padding-left: 0px;
-                padding-right: 0px;
-                background-image: url("../../img/bg_jungle.png");
-                background-repeat: no-repeat;
-                position: relative;
-                top: 50px;
-                background-size:120%;
-                max-height: 800px;
-            }
-            </style>
+    <link rel="stylesheet" type="text/css" href="_assets/css/Style.css" />
 </head>
 
 <!-- Body tag calls the init method wich initializes the stage -->
@@ -75,7 +50,11 @@
     var bool_keyDown = false;
 
     //Testing Gravity
-    gravity = 20;
+    gravity = 25;
+
+    //for jumping
+    var onGround = true;
+    var doubleJump = false;
 
     function tick() {
 
@@ -100,10 +79,32 @@
 
 
         if (keyboardSpace) {
-            var a = knightTemplate.y;
-            createjs.Tween.get(knightTemplate).to({ y: 100 }, knightTemplate.y, createjs.Ease.sineIn).to({ y: ball.y - 100 }, 1000, createjs.Ease.sineOut);
+           
+            if(onGround)
+            {
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                //grant.y = grant.y - 355;
+                onGround = false;
+                doubleJump = true;
+            }
+            else if(doubleJump)
+            {
+                //grant.y = grant.y - 355;
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                doubleJump = false;
+            }
+            
+            
+            //var a = knightTemplate.y;
+            //createjs.Tween.get(knightTemplate).to({ y: 100 }, knightTemplate.y, createjs.Ease.sineIn).to({ y: ball.y - 100 }, 1000, createjs.Ease.sineOut);
 
-            createjs.Tween.get(grant).to({ y: 50 }, grant.y, createjs.Ease.sineIn).to({ y: 155 }, 1000, createjs.Ease.sineOut);
+            //createjs.Tween.get(grant).to({ y: 50 }, grant.y, createjs.Ease.sineIn).to({ y: 155 }, 1000, createjs.Ease.sineOut);
         }
         //////////////////////////Game Over
         if (lives <= 0) {
@@ -215,15 +216,21 @@
             //tempPlat10.alpha = 1;
             //if (grant.y + 128 >= collision) {
             grant.y = tempPlat10.y - 128;
+            onGround = true;
+            doubleJump = false;
             // }
         }
 
         if (tempPlat17.hitTest(pt5.x, pt5.y) || tempPlat18.hitTest(pt6.x, pt6.y)) {
             grant.y = tempPlat17.y - 128;
+            onGround = true;
+            doubleJump = false;
         }
 
         if (ball.hitTest(pt7.x, pt7.y) || tempPlat2.hitTest(pt8.x, pt8.y) || tempPlat3.hitTest(pt9.x, pt9.y)) {
             grant.y = tempPlat2.y - 128;
+            onGround = true;
+            doubleJump = false;
         }
 
 
@@ -245,26 +252,80 @@
             
 
         }
-
-
-    var pt11 = grant.localToLocal(0, 50, coin2);
-
-    if(coin2.hitTest(pt11.x, pt11.y))
+////Remove the coins////////////////////////////
+    var pt11 = grant.localToLocal(0, 50, coin1);
+    if(coin1.hitTest(pt11.x, pt11.y))
     {
-        if(test)
-            {
+        stage.removeChild(coin1);
+        addToScore(10);
+        pt11 = 0;
+        coin1.y=null;
+        coin1.x=null;
+    }
+    var pt12 = grant.localToLocal(0, 50, coin2);
+    if(coin2.hitTest(pt12.x, pt12.y))
+    {
         stage.removeChild(coin2);
-        score = score + 10;
-        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
-            }
-            test = false;
+        addToScore(10);        
+        pt12 = 0;
+        coin2.y=null;
+        coin2.x=null;
     }
 
-    var pt12 = grant.localToLocal(0, 128, finishSign);
+    var pt13 = grant.localToLocal(0, 50, coin3  );
+     if(coin3.hitTest(pt13.x, pt13.y))
+    {
+        stage.removeChild(coin3);
+        addToScore(10);
+        pt13 = 0;
+        coin3.y=null;
+        coin3.x=null;
+    }
+    var pt14 = grant.localToLocal(0, 50, coin4);
+     if(coin4.hitTest(pt14.x, pt14.y))
+    {
+        stage.removeChild(coin4);
+        addToScore(10);
+        pt14 = 0;
+        coin4.y=null;
+        coin4.x=null;
+    }
+    var pt15 = grant.localToLocal(0, 100, coin5  );
+     if(coin5.hitTest(pt15.x, pt15.y))
+    {
+        stage.removeChild(coin5);
+        addToScore(10);
+        pt15 = 0;
+        coin5.y=null;
+        coin5.x=null;
+    }
+    ////////////////////////////////////////////////////////////
+
+    var pt12 = grant.localToLocal(0, 64, finishSign);
 
     if(finishSign.hitTest(pt12.x, pt12.y))
     {
         location.href = "Level2.html";
+    }
+
+    var pt13 = grant.localToLocal(0, 128, tempPlat5);
+
+    if(tempPlat5.hitTest(pt13.x, pt13.y))
+    {
+        grant.y = tempPlat5.y - 128;
+        onGround = true;
+        doubleJump = false;
+    }
+
+    var pt14 = grant.localToLocal(0, 128, tempPlat6);
+    var pt15 = grant.localToLocal(0, 128, tempPlat7);
+    var pt16 = grant.localToLocal(0, 128, tempPlat15);
+    var pt17 = grant.localToLocal(0, 128, tempPlat16);
+    if(tempPlat6.hitTest(pt14.x, pt14.y) || tempPlat7.hitTest(pt15.x, pt15.y) || tempPlat15.hitTest(pt16.x, pt16.y) || tempPlat16.hitTest(pt17.x, pt17.y))
+    {
+        grant.y = tempPlat6.y - 128;
+        onGround = true;
+        doubleJump = false;
     }
 
         //document.getElementById("testData").hidden = true;
@@ -364,15 +425,32 @@
 
 
     function crearimage() {
+///////Create Coins/////////////
+        coin1 = new GreenCoin();
+        coin1.x = 820;
+        coin1.y = 250;
 
         coin2 = new GreenCoin();
         coin2.x = 1000;
         coin2.y = 525;
 
-        if (test)
-        stage.addChild(coin2);
+        coin3 = new GreenCoin();
+        coin3.x = 400;
+        coin3.y = 250;
 
-        addCoins(500 ,250);
+        coin4 = new GreenCoin();
+        coin4.x = 300;
+        coin4.y = 250;
+
+        coin5 = new GreenCoin();
+        coin5.x = 500;
+        coin5.y = 250;
+
+    stage.addChild(coin1,coin2,coin3,coin4,coin5);
+       
+/////////////////////////////////////////////////////
+
+       addCoins(0 ,0);
 
         var platform1 = new Image();
         platform1.src = 'img/jungle_pack_19.png';
@@ -704,7 +782,7 @@
 
         spriteSheet = new createjs.SpriteSheet({
             framerate: 5,
-            "images": ["images/prueba4.2.png"],
+            "images": ["_assets/art/prueba4.2.png"],
             "frames": { "regX": 75, "height": 146, "regY": 0, "width": 116, "spacing": 2, "count": 100 },
             "animations": {
                 sit: [1, 1, "sit"],
@@ -747,11 +825,11 @@
 //Method to add coin
 function addCoins(x, y) {
         coin = new GreenCoin();
-        coin.x = x;
-        coin.y = y;
+        //coin.x = x;
+        //coin.y = y;
 
-        if (test)
-        stage.addChild(coin);
+        
+        //stage.addChild(coin);
     }
 
 </script>

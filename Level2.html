@@ -68,6 +68,10 @@ body
         //Testing Gravity
         gravity = 20;
 
+        //for jumping
+    var onGround = true;
+    var doubleJump = false;
+
         function tick()
         {
 
@@ -94,10 +98,29 @@ body
             
             if(keyboardSpace)
             {
-                var a= knightTemplate.y;
-                createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
+                if(onGround)
+            {
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                //grant.y = grant.y - 355;
+                onGround = false;
+                doubleJump = true;
+            }
+            else if(doubleJump)
+            {
+                //grant.y = grant.y - 355;
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                doubleJump = false;
+            }
+               // var a= knightTemplate.y;
+                //createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
 
-                createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
+                //createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
             }
 //////////////////////////Game Over
 			if(lives<=0){
@@ -204,18 +227,24 @@ body
              leftPlat4.hitTest(pt3.x, pt3.y)) 
             { 
                 grant.y = leftPlat1.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
 
             var pt4 = grant.localToLocal(0,128,ball);
             if (ball.hitTest(pt4.x, pt4.y))
             {
                 grant.y = ball.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
 
             var pt5 = grant.localToLocal(0,128,tempPlat2);
             if (tempPlat2.hitTest(pt5.x, pt5.y))
             {
                 grant.y = tempPlat2.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
 
             var pt6 = grant.localToLocal(0,128,tempPlat3);
@@ -223,18 +252,24 @@ body
             if (tempPlat3.hitTest(pt6.x, pt6.y)||tempPlat4.hitTest(pt7.x, pt7.y))
             {
                 grant.y = tempPlat3.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
 
             var pt8 = grant.localToLocal(0,128,tempPlat5);
             if (tempPlat5.hitTest(pt8.x, pt8.y))
             {
                 grant.y = tempPlat5.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
 
             var pt9 = grant.localToLocal(0,128,tempPlat9);
             if (tempPlat9.hitTest(pt9.x, pt9.y))
             {
                 grant.y = tempPlat9.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
             
             var pt10 = grant.localToLocal(0,128,tempPlat10);
@@ -242,6 +277,8 @@ body
             if (tempPlat10.hitTest(pt10.x, pt10.y)||(tempPlat6.hitTest(pt11.x, pt11.y)))
             {
                 grant.y = tempPlat10.y - 128;
+                onGround = true;
+            doubleJump = false;
             }
             
 
@@ -588,7 +625,7 @@ body
         tempPlat11 = new createjs.Bitmap(platJung38);
         tempPlat11.x = 350;
         tempPlat11.y = 300;
-
+        
         //Set bounds for tempPlat11
         //tempPlat11.setBounds(tempPlat11.x,tempPlat11.y,tempPlat11.width,tempPlat11.height);
 
@@ -772,7 +809,7 @@ body
 	
         spriteSheet = new createjs.SpriteSheet({
         framerate: 5,
-        "images": ["images/prueba4.2.png"],
+        "images": ["_assets/art/prueba4.2.png"],
         "frames": {"regX": 75, "height": 146, "regY": 0, "width": 116,"spacing":2, "count": 100},
         "animations": {
             sit: [1, 1, "sit"],
