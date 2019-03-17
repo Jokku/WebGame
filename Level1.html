@@ -10,8 +10,31 @@
 
     <script src="coins.js"></script>
 
-    <!-- Linking the external style sheet -->
-    <link rel="stylesheet" type="text/css" href="_assets/css/Style.css" />
+    <style>
+        body
+{   
+    margin: 0;
+    padding:15px;
+    background-color:lightslategray;     
+}
+
+canvas
+{
+    border: solid 2px #000;
+    background-color: #fff;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-image: url("img/bg_jungle.png");
+    background-repeat: no-repeat;
+    position: relative;
+    top: 50px;
+    background-size:120%;
+    max-height: 800px;
+}
+    </style>
 </head>
 
 <!-- Body tag calls the init method wich initializes the stage -->
@@ -782,7 +805,7 @@
 
         spriteSheet = new createjs.SpriteSheet({
             framerate: 5,
-            "images": ["_assets/art/prueba4.2.png"],
+            "images": ["img/prueba4.2.png"],
             "frames": { "regX": 75, "height": 146, "regY": 0, "width": 116, "spacing": 2, "count": 100 },
             "animations": {
                 sit: [1, 1, "sit"],
