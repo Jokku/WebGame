@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+    <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
+    <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+<style>
+body
+            {
+                margin: 0;
+                padding:15px;
+                background-color:lightslategray;
+            }
+            canvas
+            {
+                border: solid 2px #000;
+                background-color: #fff;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 0px;
+                padding-right: 0px;
+                background-image: url("img/bg_jungle.png");
+                background-repeat: no-repeat;
+                position: relative;
+                top: 50px;
+                background-size:120%;
+                max-height: 800px;
+            }
+</style>
+</head>
+<body onload="init();">
+    <h1 id="testData" hidden></h1>
+    <h1 id="testCol"></h1>
+
+<canvas id="testCanvas" width="1500px" height="970px"></canvas>
+<script>
+
+ const BALL_RADIOUS = 20;
+  const KEYCODE_LEFT = 37;
+        const KEYCODE_RIGHT = 39;
+        const KEYCODE_UP = 38;
+        const KEYCODE_DOWN = 40;
+        const SPACEBAR = 32;
+        var keyboardMoveLeft = false;
+        var keyboardMoveRight = false;
+        var keyboardMoveDown = false;
+        var keyboardMoveUp = false;
+        var keyboardSpace = false;
+        var ball;
+        var myObstacle;
+
+        ///////////////////////////////Varibles For Score
+        var score = 0;
+        var lives = 3;
+        var scoreText;
+        var HighScore = 0;
+//////////////////////////////////////////////////////////////////////////
+
+        var keyboardMoveRightAnim = true;
+
+        var spriteSheet;
+        var grant;
+        var bool_keyDown = false;
+
+        //Testing Gravity
+        gravity = 20;
+
+        //for jumping
+    var onGround = true;
+    var doubleJump = false;
+
+        function tick()
+        {
+
+          stage.update();
+        
+          //Collision and gravity testing
+          grant.y = grant.y +gravity;
+
+        var collision;
+        collision = tempPlat10.y;
+        // Here is the problem right here!
+
+       console.log(grant.y);
+
+/////////////////////////////////Discount lives if knight Fall
+       		if(grant.y > 900){
+
+       			//lives -= 1;
+       			init();
+
+       		}
+//////////////////////////////////////////////////////////////// 
+
+            
+            if(keyboardSpace)
+            {
+                if(onGround)
+            {
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                //grant.y = grant.y - 355;
+                onGround = false;
+                doubleJump = true;
+            }
+            else if(doubleJump)
+            {
+                //grant.y = grant.y - 355;
+                for(var i=0;i<500;i++)
+                {
+                    grant.y = grant.y - 0.5;
+                }
+                doubleJump = false;
+            }
+               // var a= knightTemplate.y;
+                //createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
+
+                //createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
+            }
+//////////////////////////Game Over
+			if(lives<=0){
+				location.href ="GameOver.html";
+				Lives = 3;
+			}
+/////////////////////////////////////
+
+            if(keyboardMoveLeft)
+            {
+  
+                knightTemplate.x -= 20;
+
+                grant.scaleX = -1;
+
+                grant.x = grant.x -20;
+                
+            }
+
+
+            if(!keyboardMoveRight)
+            {
+                
+                //grant.gotoAndPlay(run);
+                //grant = new createjs.Sprite(spriteSheet, "run");
+                //grant.x = stage.canvas.width / 2;
+			    //grant.y = 200;
+			    //stage.addChild(grant);
+
+                //grant = new createjs.Sprite(spriteSheet);
+		        
+                //grant.gotoAndPlay("run");
+                //grant.gotoAndPlay("sit");
+			    //stage.update();
+
+                //grant.SpriteSheet(SpriteSheet,"run");
+                
+            }
+
+            if(keyboardMoveRight)
+            {
+
+                grant.scaleX = 1;
+
+                //grant.gotoAndPlay("run");
+                knightTemplate.x += 20;
+                grant.x = grant.x +20;
+                //grant.gotoAndPlay("run");
+                //grant.gotoAndPlay(run);
+               // grant = new createjs.Sprite(spriteSheet, "sit");
+                //grant.x = stage.canvas.width / 2;
+			    //grant.y = 200;
+			    //stage.addChild(grant);
+               // grant.gotoAndStop("sit");
+               
+			    //stage.update();
+            }
+
+            if(keyboardMoveUp)
+            {
+            
+                knightTemplate.y -= 20;
+
+            }
+            if(keyboardMoveDown)
+            {
+            
+                knightTemplate.y += 20;
+
+            }
+
+
+            if(knightTemplate.x<-5)
+            {
+
+                knightTemplate.x = -5;
+            }
+            if(knightTemplate.x>stage.canvas.width - BALL_RADIOUS*5)
+            {
+
+                knightTemplate.x = stage.canvas.width - BALL_RADIOUS*5;
+            }
+
+
+            if(knightTemplate.y>stage.canvas.height - BALL_RADIOUS*2)
+            {
+
+                knightTemplate.y = stage.canvas.height - BALL_RADIOUS*2;
+            }
+            if(knightTemplate.y<0 )
+            {
+                knightTemplate.y= 0;
+                
+            }
+
+            //tempPlat10.alpha = 0.2;
+            
+            var pt = grant.localToLocal(0,128,leftPlat1);
+            var pt1 = grant.localToLocal(0,128,leftPlat2); 
+            var pt2 = grant.localToLocal(0,128,leftPlat3); 
+            var pt3 = grant.localToLocal(0,128,leftPlat4);
+
+            if (leftPlat1.hitTest(pt.x, pt.y)||leftPlat2.hitTest(pt1.x, pt1.y)||leftPlat3.hitTest(pt2.x, pt2.y)||
+             leftPlat4.hitTest(pt3.x, pt3.y)) 
+            { 
+                grant.y = leftPlat1.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+
+            var pt4 = grant.localToLocal(0,128,ball);
+            if (ball.hitTest(pt4.x, pt4.y))
+            {
+                grant.y = ball.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+
+            var pt5 = grant.localToLocal(0,128,tempPlat2);
+            if (tempPlat2.hitTest(pt5.x, pt5.y))
+            {
+                grant.y = tempPlat2.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+
+            var pt6 = grant.localToLocal(0,128,tempPlat3);
+            var pt7 = grant.localToLocal(0,128,tempPlat4);
+            if (tempPlat3.hitTest(pt6.x, pt6.y)||tempPlat4.hitTest(pt7.x, pt7.y))
+            {
+                grant.y = tempPlat3.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+
+            var pt8 = grant.localToLocal(0,128,tempPlat5);
+            if (tempPlat5.hitTest(pt8.x, pt8.y))
+            {
+                grant.y = tempPlat5.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+
+            var pt9 = grant.localToLocal(0,128,tempPlat9);
+            if (tempPlat9.hitTest(pt9.x, pt9.y))
+            {
+                grant.y = tempPlat9.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+            
+            var pt10 = grant.localToLocal(0,128,tempPlat10);
+            var pt11 = grant.localToLocal(0,128,tempPlat6);
+            if (tempPlat10.hitTest(pt10.x, pt10.y)||(tempPlat6.hitTest(pt11.x, pt11.y)))
+            {
+                grant.y = tempPlat10.y - 128;
+                onGround = true;
+            doubleJump = false;
+            }
+            
+
+            
+
+            //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
+
+           /*  var pt4 = grant.localToLocal(0,128,tempPlat14);
+
+            
+
+            var pt5 = grant.localToLocal(0,128,tempPlat17);
+            var pt6 = grant.localToLocal(0,128,tempPlat18);
+
+            var pt7 = grant.localToLocal(0,128,ball);
+            var pt8 = grant.localToLocal(0,128,tempPlat2);
+            var pt9 = grant.localToLocal(0,128,tempPlat3); */
+
+           
+
+/*             if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
+            {
+                grant.y = tempPlat17.y - 128;
+            }
+
+            if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
+            {
+                grant.y = tempPlat2.y - 128;
+            } */
+
+        }
+
+
+
+ function init()
+ {
+     //CallLoader Bar
+   // initLoader()
+   
+    ////////////
+
+
+    ///////////////////////////////This par is for save the store in the localstore of the browser
+    /*if(typeof(Storage) !=="undefined")
+            {
+                if(localStorage.HighScore==undefined)
+                {
+                    localStorage.HighScore = 0;
+                }
+                HighScore = localStorage.HighScore;
+
+            }
+            else
+            {
+                HighScore = 0;
+
+            }*/
+//////////////////////////////////////////////
+
+
+     stage = new createjs.Stage("testCanvas"); 
+     knightimage();   
+
+     grant = new createjs.Sprite(spriteSheet, "sit");
+     grant.x = 230;
+     grant.y = 155;
+     stage.addChild(grant);
+
+     //grant.setBounds(grant.x,grant.y,grant.width,grant.height);
+
+
+     //createjs.Touch.enable(stage);
+     createjs.Ticker.setFPS(10);
+     createjs.Ticker.addEventListener("tick", tick);
+     
+     //stage.addEventListener("stagemousedown", handleJumpStart);
+
+     obstacle();
+     crearimage();
+
+     crearScoreText();
+  
+
+     stage.update();
+     window.onkeyup = keyUpHandler;
+     window.onkeydown = keyDownHandler;
+     window.onkeypress = keyPressHandler;
+         
+     stage.canvas.height =window.innerHeight;
+ }
+
+ function handleJumpStart() {
+		grant = new createjs.Sprite(spriteSheet);
+		grant.gotoAndPlay("jump");
+	}
+
+
+ function obstacle()
+ {
+
+ for(var i=100;i<=1000;i+=5)
+ {
+ for(var j=100;j<=1000;j+=200)
+ {
+ myObstacle = new createjs.Shape();
+ myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
+ myObstacle.x = i;
+ myObstacle.y = j;
+   
+   //stage.addChild(myObstacle);
+ } 
+ }
+ //myObstacle = new createjs.Shape();
+ //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
+ //myObstacle.x = 540;
+ //myObstacle.y = 100;
+   //myObstacle = new component(10, 200, "green", 300, 120); 
+   //stage.addChild(myObstacle);
+ }
+    
+
+    function crearimage()
+    {
+
+        var platJung03 = new Image();
+        platJung03.src = 'img/jungle_pack_03.png';
+        
+        var platJung05 = new Image();
+        platJung05.src = 'img/jungle_pack_05.png';
+
+        var platJung07 = new Image();
+        platJung07.src = 'img/jungle_pack_07.png';
+
+        var platJung09 = new Image();
+        platJung09.src = 'img/jungle_pack_09.png';
+
+        var platJung11 = new Image();
+        platJung11.src = 'img/jungle_pack_11.png';
+
+        var platJung13 = new Image();
+        platJung13.src = 'img/jungle_pack_13.png';
+
+        var platJung15 = new Image();
+        platJung15.src = 'img/jungle_pack_15.png';
+
+        var platJung17 = new Image();
+        platJung17.src = 'img/jungle_pack_19.png';
+
+        var platJung19 = new Image();
+        platJung19.src = 'img/jungle_pack_19.png';
+
+        var platJung21 = new Image();
+        platJung21.src = 'img/jungle_pack_21.png';
+
+        var platJung33 = new Image();
+        platJung33.src = 'img/jungle_pack_33.png';
+
+        var platJung34 = new Image();
+        platJung34.src = 'img/jungle_pack_34.png';
+
+        var platJung35 = new Image();
+        platJung35.src = 'img/jungle_pack_35.png';
+
+        var platJung36 = new Image();
+        platJung36.src = 'img/jungle_pack_36.png';
+
+        var platJung37 = new Image();
+        platJung37.src = 'img/jungle_pack_37.png';
+
+        var platJung38 = new Image();
+        platJung38.src = 'img/jungle_pack_38.png';
+
+        var platJung39 = new Image();
+        platJung39.src = 'img/jungle_pack_39.png';
+
+        var platJung40 = new Image();
+        platJung40.src = 'img/jungle_pack_40.png';
+
+        var platJung41 = new Image();
+        platJung41.src = 'img/jungle_pack_41.png';
+
+        var waterJung52 = new Image();
+        waterJung52.src = 'img/jungle_pack_52.png';
+
+        var waterJung54 = new Image();
+        waterJung54.src = 'img/jungle_pack_54.png';
+
+        var plantJung64 = new Image(); 
+        plantJung64.src = 'img/jungle_pack_64.png';
+
+        var plantJung65 = new Image(); 
+        plantJung65.src = 'img/jungle_pack_65.png';
+
+        var plantJung66 = new Image(); 
+        plantJung66.src = 'img/jungle_pack_66.png';
+
+        var plantJung67 = new Image(); 
+        plantJung67.src = 'img/jungle_pack_67.png';
+
+        var plantJung68 = new Image(); 
+        plantJung68.src = 'img/jungle_pack_68.png';
+
+        var knight = new Image();
+        knight.src = 'img/Knight/Knight1n.png';
+
+        //Loop for Water
+        var xVal =0;
+        for(i=0; i<12;i++)
+        {
+            tempWater = new createjs.Bitmap(waterJung52);
+            tempWater.x = xVal;
+            tempWater.y = 840;
+            stage.addChild(tempWater);
+            xVal=xVal+128;
+        }
+
+        ball = new createjs.Bitmap(platJung09);
+        ball.x = 1375;
+        ball.y = 500;
+
+        knightTemplate = new createjs.Bitmap(knight);
+        knightTemplate.x = 220;
+        knightTemplate.y = ball.y - 100;
+
+
+        leftPlat1 = new createjs.Bitmap(platJung05);
+        leftPlat1.x = 1000;
+        leftPlat1.y = 800;
+        stage.addChild(leftPlat1);
+        leftPlat2 = new createjs.Bitmap(platJung05);
+        leftPlat2.x = leftPlat1.x + 128;
+        leftPlat2.y = 800;
+        stage.addChild(leftPlat2);
+        leftPlat3 = new createjs.Bitmap(platJung05);
+        leftPlat3.x = leftPlat2.x + 128;
+        leftPlat3.y = 800;
+        stage.addChild(leftPlat3);
+        leftPlat4 = new createjs.Bitmap(platJung05);
+        leftPlat4.x = leftPlat3.x + 128;
+        leftPlat4.y = 800;
+        stage.addChild(leftPlat4);
+
+        
+        // loop for ground 
+        var xVal =1000;
+        for(i=0; i<4;i++)
+        {
+            
+            tempbase2 = new createjs.Bitmap(platJung21);
+            tempbase2.x = xVal;
+            tempbase2.y = 800 + 128;
+            stage.addChild(tempbase2);
+            xVal = xVal + 128;
+        }
+
+        tempTree1 = new createjs.Bitmap(plantJung66);
+        tempTree1.x = 1200;
+        tempTree1.y = 670; 
+        
+        tempTree2 = new createjs.Bitmap(plantJung66);
+        tempTree2.x = 100;
+        tempTree2.y = 170;
+
+        tempPlat2 = new createjs.Bitmap(platJung39);
+        tempPlat2.x = 800;
+        tempPlat2.y = 700;
+
+        tempPlat3 = new createjs.Bitmap(platJung36);
+        tempPlat3.x = 500;
+        tempPlat3.y = leftPlat1.y;
+
+        tempPlat4 = new createjs.Bitmap(platJung37);
+        tempPlat4.x = tempPlat3.x + 128;
+        tempPlat4.y = tempPlat3.y;
+
+        tempPlat5 = new createjs.Bitmap(platJung40);
+        tempPlat5.x = 200;
+        tempPlat5.y = tempPlat2.y;
+
+        tempPlat6 = new createjs.Bitmap(platJung05);
+        tempPlat6.x = tempPlat5.x - 256;
+        tempPlat6.y = 300;
+
+        tempPlat7 = new createjs.Bitmap(platJung05);
+        tempPlat7.x = tempPlat6.x + 128;
+        tempPlat7.y = tempPlat6.y;
+
+
+
+         // loop for rightside pillar
+         var xVal = tempPlat6.x;
+         var yVal = tempPlat6.y;
+        for(i=0; i<1;i++)           //no. of columns
+        {
+            tempPillar = new createjs.Bitmap(platJung35);
+            tempPillar.x = xVal + 128;
+            tempPillar.y = tempPlat6.y + 128;
+            stage.addChild(tempPillar);
+            xVal=xVal+128;
+            for (j=0;j<2;j++){      //no. of rows
+                tempPillar2 = new createjs.Bitmap(platJung35);
+                tempPillar2.x = tempPillar.x;
+                tempPillar2.y = yVal + 128;
+                stage.addChild(tempPillar2);
+                yVal += 128;
+            }
+        }
+
+   
+
+        tempPlat8 = new createjs.Bitmap(platJung21);
+        tempPlat8.x = tempPlat7.x;
+        tempPlat8.y = yVal + 128;
+
+       // tempPlat9 = new createjs.Bitmap()
+
+        // loop for middle pillar 
+        var xVal = 500;
+        var yval = tempPlat6.y;
+        for(i=0; i<2;i++)
+        {
+            tempbase = new createjs.Bitmap(platJung05);
+            tempbase.x = xVal;
+            tempbase.y = 300;
+            stage.addChild(tempbase);
+            xVal=xVal+128;
+            for (j=0;j<2;j++){
+                tempbase2 = new createjs.Bitmap(platJung35);
+                tempbase2.x = tempbase.x;
+                tempbase2.y = yval+128;
+                stage.addChild(tempbase2);
+                yVal += 128;
+            }
+        }
+
+        tempPlat9 = new createjs.Bitmap(platJung19);
+        tempPlat9.x = 372;
+        tempPlat9.y = 490;
+
+        tempPlat10 = new createjs.Bitmap(platJung40);
+        tempPlat10.x = 200;
+        tempPlat10.y = 300;
+
+        tempPlat11 = new createjs.Bitmap(platJung38);
+        tempPlat11.x = 1000;
+        tempPlat11.y = 300;
+        
+        //Set bounds for tempPlat11
+        //tempPlat11.setBounds(tempPlat11.x,tempPlat11.y,tempPlat11.width,tempPlat11.height);
+
+        tempPlat12 = new createjs.Bitmap(platJung15);
+        tempPlat12.x = tempPlat11.x + 128;
+        tempPlat12.y = tempPlat11.y;
+
+        tempPlat13 = new createjs.Bitmap(plantJung64);
+        tempPlat13.x = tempPlat11.x + 50;
+        tempPlat13.y = tempPlat11.y - 130;
+        
+
+        
+        //To play the background music
+        //var audio = new Audio('M-GameBG.ogg');
+        //audio.play();
+
+        // Create a single item to load.
+		src = "sound/M-GameBG.ogg";
+
+		createjs.Sound.alternateExtensions = ["mp3"];	// add other extensions to try loading if the src file extension is not supported
+		//createjs.Sound.onLoadComplete = playSound;  // add a callback for when load is completed
+        
+        createjs.Sound.addEventListener("fileload", playSound);
+
+        
+        //soundInstance = createjs.Sound.play(src);  // start playing the sound we just loaded, storing the playing instance
+		createjs.Sound.registerSound(src);  // register sound, which preloads by default
+
+
+
+        stage.addChild(ball,tempPlat2,tempPlat3,tempPlat4,tempPlat5,
+        tempPlat6,tempPlat7,tempPlat8,tempPlat9,tempPlat10,tempPlat11,tempPlat12,tempPlat13,tempTree1
+        ,tempTree2);
+
+       
+    }
+
+       
+        function keyDownHandler(e)
+        {
+         switch(e.keyCode)
+         {
+          case KEYCODE_LEFT:
+          {
+            keyboardMoveLeft = true;
+            if(document.getElementById("testData").innerHTML == "False")
+            {
+                grant.gotoAndPlay("run");
+            }
+            document.getElementById("testData").innerHTML = "True"; 
+            break;
+          }
+          case KEYCODE_RIGHT:
+          {
+            
+            keyboardMoveRight = true;
+            if(document.getElementById("testData").innerHTML == "False")
+            {
+                grant.gotoAndPlay("run");
+            }
+            document.getElementById("testData").innerHTML = "True"; 
+            break;
+
+          } 
+          case KEYCODE_UP: keyboardMoveUp = true; break;
+          case KEYCODE_DOWN: keyboardMoveDown = true; break;
+          case SPACEBAR: 
+          {
+              keyboardSpace = true;
+              grant.gotoAndPlay("jump");  
+              break;
+          }
+
+          //foranim
+          case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
+         }
+        }
+
+         function keyUpHandler(e)
+         {
+
+  switch(e.keyCode)
+         {
+
+          case KEYCODE_LEFT: 
+          {
+              keyboardMoveLeft = false;
+              if(document.getElementById("testData").innerHTML == "True")
+              {
+                grant.gotoAndPlay("sit");
+              }
+              document.getElementById("testData").innerHTML = "False";
+              break;
+          }
+          case KEYCODE_RIGHT: 
+          {
+             
+              keyboardMoveRight = false; 
+              if(document.getElementById("testData").innerHTML == "True")
+              {
+                grant.gotoAndPlay("sit");
+              }
+              document.getElementById("testData").innerHTML = "False";
+              break;
+          }
+          case KEYCODE_UP: keyboardMoveUp = false; break;
+          case KEYCODE_DOWN: keyboardMoveDown = false; break;
+          case SPACEBAR: keyboardSpace = false; break;
+          //foranim
+          case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
+         }          
+         }
+
+
+    function playSound(event) {
+		soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
+	}
+
+
+
+    ///ForLoader///
+
+    function initLoader() {
+        setupStage();
+        buildLoaderBar();
+        startLoad();
+    }
+    function setupStage() {
+        stage = new createjs.Stage(document.getElementById('canvas'));
+        createjs.Ticker.addEventListener("tick", runGame);
+        createjs.Ticker.setFPS(60);
+    }
+    function buildLoaderBar() {
+        loaderBar = new createjs.Shape();
+        loaderBar.x = loaderBar.y = 100;
+        loaderBar.graphics.setStrokeStyle(2);
+        loaderBar.graphics.beginStroke("#000");
+        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
+        stage.addChild(loaderBar);
+    }
+    function updateLoaderBar() {
+        loaderBar.graphics.beginFill('#00ff00');
+        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH * percentLoaded, 40);
+        loaderBar.graphics.endFill();
+        loaderBar.graphics.setStrokeStyle(2);
+        loaderBar.graphics.beginStroke("#000");
+        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
+        loaderBar.graphics.endStroke();
+    }
+    function startLoad() {
+        loadInterval = setInterval(updateLoad, 50);
+    }
+    function updateLoad() {
+        percentLoaded += .005;
+        updateLoaderBar();
+        if (percentLoaded >= 1) {
+            clearInterval(loadInterval);
+            stage.removeChild(loaderBar);
+        }
+    }
+    function runGame(e) {
+        stage.update();
+    }
+
+    // function createKnight()
+    //     {
+
+    //        knight = new Image();
+    //        knight.src = 'img/Knight/Knight1n.png';
+    //        var bitmap = new createjs.Bitmap(knight);
+    //        knight.x = 500;
+    //        knight.y = 0;
+    //        stage.addChild(bitmap);
+
+    //     }
+
+
+        function knightimage(){
+
+	
+        spriteSheet = new createjs.SpriteSheet({
+        framerate: 5,
+        "images": ["img/prueba4.2.png"],
+        "frames": {"regX": 75, "height": 146, "regY": 0, "width": 116,"spacing":2, "count": 100},
+        "animations": {
+            sit: [1, 1, "sit"],
+            run: [0, 3, "run"],
+            jump: [0, 0, "sit"]
+        }
+    });
+
+
+}
+
+
+///////////////////////////////////////////these method are for the Score and text of lives
+
+function crearScoreText()
+        {
+            scoreText = new createjs.Text("", "50px Arial", "#423425");
+            scoreText.y = stage.canvas.height -900;
+            scoreText.x = stage.canvas.width -900;
+            stage.addChild(scoreText);
+            console.log("fsfs");
+            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+        }
+
+        function addToScore(points)
+        {
+            score += points;
+            updateStatusLine();
+
+        }
+        //function to show score
+        function updateStatusLine()
+        {
+            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+
+        }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///Loader Ends///
+
+
+
+</script>
+</body>
+</html>
