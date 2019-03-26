@@ -6,6 +6,7 @@
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+	<script src="coins.js"></script>
 <style>
 body
             {
@@ -402,7 +403,36 @@ body
 
     function crearimage()
     {
+		coin1 = new GreenCoin(); // 3rd coin on the right
+        coin1.x = 875;
+        coin1.y = 650;
 
+        coin2 = new GreenCoin(); // 2nd coin from the right
+        coin2.x = 1025;
+        coin2.y = 250;
+
+        coin3 = new GreenCoin();// 6th coin from the  right
+        coin3.x = 400;
+        coin3.y = 440;
+
+        coin4 = new GreenCoin(); //5th coin from the right
+        coin4.x = 525;
+        coin4.y = 250;
+
+        coin5 = new GreenCoin(); //  4th  coin from right
+        coin5.x = 640;
+        coin5.y = 750;
+		
+		coin6 = new GreenCoin(); // 1st coin from right
+        coin6.x = 1175;
+        coin6.y = 750;
+
+    stage.addChild(coin1,coin2,coin3,coin4,coin5,coin6);
+       
+/////////////////////////////////////////////////////
+
+       addCoins(0 ,0);
+		
         var platJung03 = new Image();
         platJung03.src = 'img/jungle_pack_03.png';
         
@@ -655,9 +685,6 @@ body
         //soundInstance = createjs.Sound.play(src);  // start playing the sound we just loaded, storing the playing instance
 		createjs.Sound.registerSound(src);  // register sound, which preloads by default
 
-        
-        
-
 
 
         stage.addChild(ball,tempPlat2,tempPlat3,tempPlat4,tempPlat5,
@@ -854,6 +881,14 @@ function crearScoreText()
 /////////////////////////////////////////////////////////////////////////////////////////////
 
     ///Loader Ends///
+	function addCoins(x, y) {
+        coin = new GreenCoin();
+        //coin.x = x;
+        //coin.y = y;
+
+        
+        //stage.addChild(coin);
+    }
 
 
 
