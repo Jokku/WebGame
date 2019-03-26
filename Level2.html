@@ -424,6 +424,7 @@ body
      //stage.addEventListener("stagemousedown", handleJumpStart);
 
      obstacle();
+     drawLevel2Title();
      crearimage();
 
      crearScoreText();
@@ -470,6 +471,22 @@ body
     {
         createjs.Sound.registerSound(soundsrc);
         createjs.Sound.play(soundsrc);
+    }
+
+    function drawLevel2Title() {
+        var imgPath = 'images/level2.png';
+        title = new createjs.Bitmap(imgPath);
+        title.x = 500;
+        title.y = -200;
+        stage.addChild(title);
+        stage.update();
+        setTimeout(titleMove, 100);
+    }
+    function titleMove() {
+        createjs.Tween.get(title).to({y:100},3000).call(titleGone,[title],this);
+    }
+    function titleGone(title){
+        stage.removeChild(title);
     }
 
     function crearimage()
