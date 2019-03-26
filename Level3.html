@@ -38,9 +38,10 @@ body
 
 <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
-
- const BALL_RADIOUS = 20;
-  const KEYCODE_LEFT = 37;
+        // sound for Coin
+        soundsrc = "sound/coinSound.mp3";
+        const BALL_RADIOUS = 20;
+        const KEYCODE_LEFT = 37;
         const KEYCODE_RIGHT = 39;
         const KEYCODE_UP = 38;
         const KEYCODE_DOWN = 40;
@@ -283,6 +284,70 @@ body
             }
             
 
+            var pt12 = grant.localToLocal(0, 50, coin1);
+    if(coin1.hitTest(pt12.x, pt12.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin1);
+        addToScore(10);        
+        pt12 = 0;
+        coin1.y=null;
+        coin1.x=null;
+    }
+
+    var pt13 = grant.localToLocal(0, 50, coin2  );
+     if(coin3.hitTest(pt13.x, pt13.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin2);
+        addToScore(10);
+        pt13 = 0;
+        coin2.y=null;
+        coin2.x=null;
+    }
+    var pt14 = grant.localToLocal(0, 50, coin3);
+     if(coin4.hitTest(pt14.x, pt14.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin3);
+        addToScore(10);
+        pt14 = 0;
+        coin3.y=null;
+        coin3.x=null;
+    }
+    var pt15 = grant.localToLocal(0, 100, coin4  );
+     if(coin5.hitTest(pt15.x, pt15.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin4);
+        addToScore(10);
+        pt15 = 0;
+        coin4.y=null;
+        coin4.x=null;
+    }
+
+    var pt16 = grant.localToLocal(0, 100, coin5  );
+     if(coin5.hitTest(pt16.x, pt16.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin5);
+        addToScore(10);
+        pt16 = 0;
+        coin5.y=null;
+        coin5.x=null;
+    }
+
+    var pt17 = grant.localToLocal(0, 100, coin6  );
+     if(coin6.hitTest(pt17.x, pt17.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin6);
+        addToScore(10);
+        pt17 = 0;
+        coin6.y=null;
+        coin6.x=null;
+    }
+
             
 
             //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
@@ -400,6 +465,11 @@ body
    //stage.addChild(myObstacle);
  }
     
+ function playCoinSound()
+    {
+        createjs.Sound.registerSound(soundsrc);
+        createjs.Sound.play(soundsrc);
+    }
 
     function crearimage()
     {
