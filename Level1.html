@@ -44,8 +44,6 @@ canvas
 </body>
 
 <script>
-    // sound for Coin
-    soundsrc = "sound/coinSound.mp3";
     var test = true;
     const BALL_RADIOUS = 20;
     const KEYCODE_LEFT = 37;
@@ -273,7 +271,6 @@ canvas
             //coin.visible = false;
             if(test)
             {
-                playCoinSound();
                 stage.removeChild(coin);
                 score = score + 10;
                 scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
@@ -287,7 +284,6 @@ canvas
     var pt11 = grant.localToLocal(0, 50, coin1);
     if(coin1.hitTest(pt11.x, pt11.y))
     {
-        playCoinSound();
         stage.removeChild(coin1);
         addToScore(10);
         pt11 = 0;
@@ -297,7 +293,6 @@ canvas
     var pt12 = grant.localToLocal(0, 50, coin2);
     if(coin2.hitTest(pt12.x, pt12.y))
     {
-        playCoinSound();
         stage.removeChild(coin2);
         addToScore(10);        
         pt12 = 0;
@@ -308,7 +303,6 @@ canvas
     var pt13 = grant.localToLocal(0, 50, coin3  );
      if(coin3.hitTest(pt13.x, pt13.y))
     {
-        playCoinSound();
         stage.removeChild(coin3);
         addToScore(10);
         pt13 = 0;
@@ -318,7 +312,6 @@ canvas
     var pt14 = grant.localToLocal(0, 50, coin4);
      if(coin4.hitTest(pt14.x, pt14.y))
     {
-        playCoinSound();
         stage.removeChild(coin4);
         addToScore(10);
         pt14 = 0;
@@ -328,7 +321,6 @@ canvas
     var pt15 = grant.localToLocal(0, 100, coin5  );
      if(coin5.hitTest(pt15.x, pt15.y))
     {
-        playCoinSound();
         stage.removeChild(coin5);
         addToScore(10);
         pt15 = 0;
@@ -421,10 +413,7 @@ canvas
         //stage.addEventListener("stagemousedown", handleJumpStart);
 
         obstacle();
-<<<<<<< HEAD
 
-=======
->>>>>>> 0cd0e43f6c0991475bfa5a83cd7182da4109099a
         drawTitle();
         crearimage();
 
@@ -467,27 +456,6 @@ canvas
         //stage.addChild(myObstacle);
     }
 
-    function playCoinSound()
-    {
-        createjs.Sound.registerSound(soundsrc);
-        createjs.Sound.play(soundsrc);
-    }
-
-    function drawTitle() {
-        var imgPath = 'images/level1.png';
-        title = new createjs.Bitmap(imgPath);
-        title.x = 500;
-        title.y = -200;
-        stage.addChild(title);
-        stage.update();
-        setTimeout(titleMove, 100);
-    }
-    function titleMove() {
-        createjs.Tween.get(title).to({y:100},3000).call(titleGone,[title],this);
-    }
-    function titleGone(title){
-        stage.removeChild(title);
-    }
 
     function crearimage() {
 ///////Create Coins/////////////
