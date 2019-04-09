@@ -59,6 +59,8 @@ canvas
     var ball;
     var myObstacle;
 
+
+
     ///////////////////////////////Varibles For Score
     var score = 0;
     var lives = 3;
@@ -82,6 +84,8 @@ canvas
     function tick() {
 
         stage.update();
+
+       
 
         //Collision and gravity testing
         grant.y = grant.y + gravity;
@@ -145,6 +149,7 @@ canvas
             grant.x = grant.x - 20;
 
         }
+
 
 
         if (!keyboardMoveRight) {
@@ -351,7 +356,9 @@ canvas
         doubleJump = false;
     }
 
-        //document.getElementById("testData").hidden = true;
+
+    //document.getElementById("testData").hidden = false;
+    //document.getElementById("testData").innerHTML = pt18;
 
     }
 
@@ -406,6 +413,8 @@ canvas
         //stage.addEventListener("stagemousedown", handleJumpStart);
 
         obstacle();
+
+        drawTitle();
         crearimage();
 
         crearScoreText();
@@ -416,7 +425,8 @@ canvas
         window.onkeyup = keyUpHandler;
         window.onkeydown = keyDownHandler;
         window.onkeypress = keyPressHandler;
-
+        window.onmousedown = keyDownHandler;
+        window.onmouseup = keyUpHandler;
         stage.canvas.height = window.innerHeight;
     }
 
@@ -516,9 +526,11 @@ canvas
 
 
 
+
         ball = new createjs.Bitmap(platform1);
         ball.x = 200;
         ball.y = 300;
+
 
         knightTemplate = new createjs.Bitmap(knight);
         knightTemplate.x = 220;
@@ -698,7 +710,7 @@ canvas
                     keyboardSpace = true;
                     grant.gotoAndPlay("jump");
                     break;
-                }
+                }  
 
             //foranim
             case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
@@ -741,6 +753,29 @@ canvas
         soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
     }
 
+    function drawTitle() {
+        var imgPath = 'images/level1.png';
+        title = new createjs.Bitmap(imgPath);
+        title.x = 500;
+        title.y = -200;
+        stage.addChild(title);
+        stage.update();
+        setTimeout(titleMove, 100);
+    }
+
+    function titleMove() {
+        createjs.Tween.get(title).to({y:100},3000).call(titleGone,[title],this);
+    }
+    
+    function titleGone(title){
+        stage.removeChild(title);
+    }
+
+	
+    window.addEventListener("click", function(event) { 
+        grant.gotoAndPlay("attack");
+        //alert(grant.currentAnimation);
+    })
 
 
     ///ForLoader///
@@ -805,12 +840,13 @@ canvas
 
         spriteSheet = new createjs.SpriteSheet({
             framerate: 5,
-            "images": ["img/prueba4.2.png"],
-            "frames": { "regX": 75, "height": 146, "regY": 0, "width": 116, "spacing": 2, "count": 100 },
+            "images": ["img/prueba4.6.png"],
+            "frames": { "regX": 75, "height": 148.6, "regY": 0, "width": 291, "spacing": 2, "count": 100 },
             "animations": {
                 sit: [1, 1, "sit"],
                 run: [0, 3, "run"],
-                jump: [0, 0, "sit"]
+                jump: [0, 0, "sit"],
+                attack: [4,10, "sit"]
             }
         });
 
@@ -854,6 +890,7 @@ function addCoins(x, y) {
         
         //stage.addChild(coin);
     }
+
 
 </script>
 

@@ -2,34 +2,62 @@
 <head>
 <title>Back od the Knightgame</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+	body
+	{   padding: 0%;
+		margin: 0%;
+		background-size: 100%;
+		background-image: url("images/background.jpg");   
+	}
+	#playbutton
+	{
+		position: relative;
+		left: 47%;
+		top: 650px;
+	}
+	
+	#myProgress {
+  width: 50%;
+  background-color: #ddd;
+  position: relative;
+  left: 25%;	
+  top: 660px;
+  visibility: hidden;
+  
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+}
+
+</style>
 </head>
 <body bgcolor="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <!-- Save for Web Slices (Back od the Knightgame.psd) -->
-
-
-<table id="Table_01" width="852" height="480" border="0" cellpadding="0" cellspacing="0" style="margin: auto; display: block; margin-top: 50px; margin-left: auto; ">
-	<tr>
-		<td colspan="3">
-			<img src="images/Back-od-the-Knightgame_01.gif" width="852" height="325" alt=""></td>
-	</tr>
-	<tr>
-		<td rowspan="2">
-			<img src="images/Back-od-the-Knightgame_02.gif" width="40" height="155" alt=""></td>
-		<td>
-			<a href="Level1.html">
-			<img src="images/Back-od-the-Knightgame_03.png" width="233" height="65" alt=""></td>
-			</a>
-
-			<h1>Jokku</h1>
-		<td rowspan="2">
-			<img src="images/Back-od-the-Knightgame_04.gif" width="579" height="155" alt=""></td>
-	</tr>
-	<tr>
-		<td>
-			<img src="images/Back-od-the-Knightgame_05.gif" width="233" height="90" alt=""></td>
-	</tr>
-</table>
-
+<a onclick="move()" ><img id="playbutton" src="images/PlayButton.png" height="150px" width="150px"></a>
+<div id="myProgress">
+	<div id="myBar"></div>
+  </div>
 <!-- End Save for Web Slices -->
+
+<script>
+	function move() {
+	  var elem = document.getElementById("myBar");  
+	  elem.style.visibility = "visible";
+	  var width = 1;
+	  var id = setInterval(frame, 10);
+	  function frame() {
+		if (width >= 100) {
+			location.href ="Level1.html";
+		  clearInterval(id);
+		} else {
+		  width++; 
+		  elem.style.width = width + '%'; 
+		}
+	  }
+	}
+	</script>
 </body>
 </html>

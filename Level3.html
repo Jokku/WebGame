@@ -38,9 +38,10 @@ body
 
 <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
-
- const BALL_RADIOUS = 20;
-  const KEYCODE_LEFT = 37;
+        // sound for Coin
+        soundsrc = "sound/coinSound.mp3";
+        const BALL_RADIOUS = 20;
+        const KEYCODE_LEFT = 37;
         const KEYCODE_RIGHT = 39;
         const KEYCODE_UP = 38;
         const KEYCODE_DOWN = 40;
@@ -52,6 +53,13 @@ body
         var keyboardSpace = false;
         var ball;
         var myObstacle;
+
+        //////////////////////Enemy variable
+     var enemy;
+    var direction = true;
+    var counter = 0;
+
+    /////////////////////////
 
         ///////////////////////////////Varibles For Score
         var score = 0;
@@ -72,11 +80,43 @@ body
         //for jumping
     var onGround = true;
     var doubleJump = false;
+    var isPlay = true;
+    var isLeft;
 
         function tick()
         {
 
           stage.update();
+
+           //Enemy Movement
+           if(isPlay)
+            {
+                if(direction)
+            {
+                isLeft = true;
+                enemy.x = enemy.x -14;
+                enemy.scaleX = -1;
+                counter++;
+                if(counter > 25){
+                    direction = false;
+                    counter = 0;
+                }
+
+            }           
+
+            if(!direction)
+            {
+                isLeft = false;
+                enemy.x = enemy.x +14;
+                enemy.scaleX = 1;
+                counter++;
+                if(counter > 25){
+                    direction = true;
+                    counter = 0;
+                }
+
+            }           
+            }
         
           //Collision and gravity testing
           grant.y = grant.y +gravity;
@@ -283,6 +323,120 @@ body
             }
             
 
+            var pt12 = grant.localToLocal(0, 50, coin1);
+    if(coin1.hitTest(pt12.x, pt12.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin1);
+        addToScore(10);        
+        pt12 = 0;
+        coin1.y=null;
+        coin1.x=null;
+    }
+
+    var pt13 = grant.localToLocal(0, 50, coin2  );
+     if(coin3.hitTest(pt13.x, pt13.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin2);
+        addToScore(10);
+        pt13 = 0;
+        coin2.y=null;
+        coin2.x=null;
+    }
+    var pt14 = grant.localToLocal(0, 50, coin3);
+     if(coin4.hitTest(pt14.x, pt14.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin3);
+        addToScore(10);
+        pt14 = 0;
+        coin3.y=null;
+        coin3.x=null;
+    }
+    var pt15 = grant.localToLocal(0, 100, coin4  );
+     if(coin5.hitTest(pt15.x, pt15.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin4);
+        addToScore(10);
+        pt15 = 0;
+        coin4.y=null;
+        coin4.x=null;
+    }
+
+    var pt16 = grant.localToLocal(0, 100, coin5  );
+     if(coin5.hitTest(pt16.x, pt16.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin5);
+        addToScore(10);
+        pt16 = 0;
+        coin5.y=null;
+        coin5.x=null;
+    }
+
+    var pt17 = grant.localToLocal(0, 100, coin6  );
+     if(coin6.hitTest(pt17.x, pt17.y))
+    {
+        playCoinSound();
+        stage.removeChild(coin6);
+        addToScore(10);
+        pt17 = 0;
+        coin6.y=null;
+        coin6.x=null;
+    }
+
+//Enemy hit test
+var pt18 = grant.localToLocal(180, 120, enemy);
+     if(enemy.hitTest(pt18.x, pt18.y))
+    {
+        if(grant.currentAnimation == "attack")
+        {
+            stage.removeChild(enemy);
+            addToScore(20);
+            pt18 = 0;
+            enemy.y=null;
+            enemy.x=null;
+        }
+       
+        
+    }
+
+    var pt18 = grant.localToLocal(10, 120, enemy);
+     if(enemy.hitTest(pt18.x, pt18.y))
+    {
+        if(grant.currentAnimation != "attack")
+        {
+            {
+            lives -= 1;
+            init();
+        }
+        }
+         
+    }
+    if(pt18.y == 147 )
+   {
+       /*if(!isActivated)
+       {
+        enemyAttackImage();
+    enemy = new createjs.Sprite(spriteSheetEnemy2,"attack");
+    isActivated = true;
+       }
+       */
+       isPlay = false;
+       //enemy.scaleX = -1;
+       if(grant.x > enemy.x)
+       {
+        enemy.scaleX = 1;
+       }
+       else
+       {
+        enemy.scaleX = -1;
+       }
+
+   }
+
             
 
             //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
@@ -341,6 +495,13 @@ body
 
 
      stage = new createjs.Stage("testCanvas"); 
+
+     enemyimage();       
+        enemy = new createjs.Sprite(spriteSheetEnemy,"run");
+        enemy.x = 1450;
+        enemy.y = 645;
+        stage.addChild(enemy);
+
      knightimage();   
 
      grant = new createjs.Sprite(spriteSheet, "sit");
@@ -358,6 +519,7 @@ body
      //stage.addEventListener("stagemousedown", handleJumpStart);
 
      obstacle();
+     drawTitle();
      crearimage();
 
      crearScoreText();
@@ -400,6 +562,27 @@ body
    //stage.addChild(myObstacle);
  }
     
+ function playCoinSound()
+    {
+        createjs.Sound.registerSound(soundsrc);
+        createjs.Sound.play(soundsrc);
+    }
+
+    function drawTitle() {
+        var imgPath = 'images/level3.png';
+        title = new createjs.Bitmap(imgPath);
+        title.x = 500;
+        title.y = -200;
+        stage.addChild(title);
+        stage.update();
+        setTimeout(titleMove, 100);
+    }
+    function titleMove() {
+        createjs.Tween.get(title).to({y:100},3000).call(titleGone,[title],this);
+    }
+    function titleGone(title){
+        stage.removeChild(title);
+    }
 
     function crearimage()
     {
@@ -775,6 +958,10 @@ body
 		soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
 	}
 
+    window.addEventListener("click", function(event) { 
+        grant.gotoAndPlay("attack");
+        //alert(grant.currentAnimation);
+    })
 
 
     ///ForLoader///
@@ -834,19 +1021,20 @@ body
     //     }
 
 
-        function knightimage(){
+    function knightimage() {
 
-	
-        spriteSheet = new createjs.SpriteSheet({
-        framerate: 5,
-        "images": ["img/prueba4.2.png"],
-        "frames": {"regX": 75, "height": 146, "regY": 0, "width": 116,"spacing":2, "count": 100},
-        "animations": {
-            sit: [1, 1, "sit"],
-            run: [0, 3, "run"],
-            jump: [0, 0, "sit"]
-        }
-    });
+
+spriteSheet = new createjs.SpriteSheet({
+    framerate: 5,
+    "images": ["img/prueba4.6.png"],
+    "frames": { "regX": 75, "height": 148.6, "regY": 0, "width": 291, "spacing": 2, "count": 100 },
+    "animations": {
+        sit: [1, 1, "sit"],
+        run: [0, 3, "run"],
+        jump: [0, 0, "sit"],
+        attack: [4,10, "sit"]
+    }
+});
 
 
 }
@@ -888,6 +1076,18 @@ function crearScoreText()
 
         
         //stage.addChild(coin);
+    }
+
+    function enemyimage(){ 
+        spriteSheetEnemy = new createjs.SpriteSheet({
+        framerate: 2,
+        "images": ["final2.png"],
+        "frames": {"regX": 30, "height": 167, "regY": 0, "width": 189.5, "spacing":0, "margin":3},
+        "animations": {
+            run: [0,7,"run"],
+             sit: [1, 1, "sit"],
+        }
+    });
     }
 
 
