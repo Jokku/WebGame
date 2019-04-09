@@ -82,7 +82,7 @@ body
     var doubleJump = false;
     var isPlay = true;
     var isLeft;
-
+    var scoreVal = 0;
         function tick()
         {
 
@@ -463,6 +463,19 @@ body
                 grant.y = tempPlat2.y - 128;
             } */
 
+            
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            scoreVal = url.searchParams.get("score");
+            var livesVal = url.searchParams.get("lives");
+            if(score==0)
+            {
+                
+                score = score + parseInt(scoreVal, 10) ;
+                lives = parseInt(livesVal, 10) ;
+                updateStatusLine();
+            }
+            
         }
 
 
@@ -494,6 +507,7 @@ body
 
 
      stage = new createjs.Stage("testCanvas"); 
+     
      enemyimage();       
         enemy = new createjs.Sprite(spriteSheetEnemy,"run");
         enemy.x = 450;
@@ -528,6 +542,7 @@ body
      window.onkeypress = keyPressHandler;
          
      stage.canvas.height =window.innerHeight;
+     
  }
 
  function handleJumpStart() {
