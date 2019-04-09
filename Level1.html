@@ -61,7 +61,7 @@ canvas
 
 
 
-    ///////////////////////////////Varibles For Score
+    ///////////////////////////////Varibles For Score//////////////////////////
     var score = 0;
     var lives = 3;
     var scoreText;
@@ -127,18 +127,13 @@ canvas
                 doubleJump = false;
             }
             
-            
-            //var a = knightTemplate.y;
-            //createjs.Tween.get(knightTemplate).to({ y: 100 }, knightTemplate.y, createjs.Ease.sineIn).to({ y: ball.y - 100 }, 1000, createjs.Ease.sineOut);
-
-            //createjs.Tween.get(grant).to({ y: 50 }, grant.y, createjs.Ease.sineIn).to({ y: 155 }, 1000, createjs.Ease.sineOut);
         }
-        //////////////////////////Game Over
+        //////////////////////////Game Over///////////////
         if (lives <= 0) {
             location.href = "GameOver.html";
             Lives = 3;
         }
-        /////////////////////////////////////
+        /////////////////////////////////////////////////
 
         if (keyboardMoveLeft) {
 
@@ -152,40 +147,12 @@ canvas
 
 
 
-        if (!keyboardMoveRight) {
-
-            //grant.gotoAndPlay(run);
-            //grant = new createjs.Sprite(spriteSheet, "run");
-            //grant.x = stage.canvas.width / 2;
-            //grant.y = 200;
-            //stage.addChild(grant);
-
-            //grant = new createjs.Sprite(spriteSheet);
-
-            //grant.gotoAndPlay("run");
-            //grant.gotoAndPlay("sit");
-            //stage.update();
-
-            //grant.SpriteSheet(SpriteSheet,"run");
-
-        }
 
         if (keyboardMoveRight) {
 
             grant.scaleX = 1;
-
-            //grant.gotoAndPlay("run");
             knightTemplate.x += 20;
             grant.x = grant.x + 20;
-            //grant.gotoAndPlay("run");
-            //grant.gotoAndPlay(run);
-            // grant = new createjs.Sprite(spriteSheet, "sit");
-            //grant.x = stage.canvas.width / 2;
-            //grant.y = 200;
-            //stage.addChild(grant);
-            // grant.gotoAndStop("sit");
-
-            //stage.update();
         }
 
         if (keyboardMoveUp) {
@@ -218,8 +185,6 @@ canvas
             knightTemplate.y = 0;
 
         }
-
-        //tempPlat10.alpha = 0.2;
         
         var pt = grant.localToLocal(0, 128, tempPlat10);
         var pt1 = grant.localToLocal(0, 128, tempPlat11);
@@ -241,12 +206,9 @@ canvas
 
         if (tempPlat10.hitTest(pt.x, pt.y) || tempPlat11.hitTest(pt1.x, pt1.y) || tempPlat12.hitTest(pt2.x, pt2.y) ||
             tempPlat13.hitTest(pt3.x, pt3.y) || tempPlat14.hitTest(pt4.x, pt4.y)) {
-            //tempPlat10.alpha = 1;
-            //if (grant.y + 128 >= collision) {
             grant.y = tempPlat10.y - 128;
             onGround = true;
             doubleJump = false;
-            // }
         }
 
         if (tempPlat17.hitTest(pt5.x, pt5.y) || tempPlat18.hitTest(pt6.x, pt6.y)) {
@@ -268,7 +230,6 @@ canvas
         if(coin.hitTest(pt10.x, pt10.y))
         {
         
-            //coin.visible = false;
             if(test)
             {
                 stage.removeChild(coin);
@@ -278,7 +239,6 @@ canvas
 
             test = false;
             
-
         }
 ////Remove the coins////////////////////////////
     var pt11 = grant.localToLocal(0, 50, coin1);
@@ -357,39 +317,14 @@ canvas
     }
 
 
-    //document.getElementById("testData").hidden = false;
-    //document.getElementById("testData").innerHTML = pt18;
 
     }
 
     function init() {
        
-        //CallLoader Bar
-        // initLoader()
-
-        ////////////
-
-
-        ///////////////////////////////This par is for save the store in the localstore of the browser
-        /*if(typeof(Storage) !=="undefined")
-                {
-                    if(localStorage.HighScore==undefined)
-                    {
-                        localStorage.HighScore = 0;
-                    }
-                    HighScore = localStorage.HighScore;
-    
-                }
-                else
-                {
-                    HighScore = 0;
-    
-                }*/
-        //////////////////////////////////////////////
-
 
         stage = new createjs.Stage("testCanvas");
-        createjs.Touch.enable(stage);
+        //createjs.Touch.enable(stage);
         knightimage();
 
         grant = new createjs.Sprite(spriteSheet, "sit");
@@ -419,8 +354,6 @@ canvas
 
         crearScoreText();
 
-        
-
         stage.update();
         window.onkeyup = keyUpHandler;
         window.onkeydown = keyDownHandler;
@@ -445,15 +378,8 @@ canvas
                 myObstacle.x = i;
                 myObstacle.y = j;
 
-                //stage.addChild(myObstacle);
             }
         }
-        //myObstacle = new createjs.Shape();
-        //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
-        //myObstacle.x = 540;
-        //myObstacle.y = 100;
-        //myObstacle = new component(10, 200, "green", 300, 120); 
-        //stage.addChild(myObstacle);
     }
 
 
@@ -648,9 +574,6 @@ canvas
         }
 
 
-        //To play the background music
-        //var audio = new Audio('M-GameBG.ogg');
-        //audio.play();
 
         // Create a single item to load.
         src = "sound/M-GameBG.ogg";
@@ -822,17 +745,6 @@ canvas
         stage.update();
     }
 
-    // function createKnight()
-    //     {
-
-    //        knight = new Image();
-    //        knight.src = 'img/Knight/Knight1n.png';
-    //        var bitmap = new createjs.Bitmap(knight);
-    //        knight.x = 500;
-    //        knight.y = 0;
-    //        stage.addChild(bitmap);
-
-    //     }
 
 
     function knightimage() {
@@ -862,7 +774,7 @@ canvas
         scoreText.x = stage.canvas.width - 900;
         stage.addChild(scoreText);
         console.log("fsfs");
-        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
+        scoreText.text = "Score: " + score + " / Lives: " + lives;
     }
 
     function addToScore(points) {
@@ -872,7 +784,7 @@ canvas
     }
     //function to show score
     function updateStatusLine() {
-        scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
+        scoreText.text = "Score: " + score + " / Lives: " + lives;
 
     }
 
@@ -884,11 +796,6 @@ canvas
 //Method to add coin
 function addCoins(x, y) {
         coin = new GreenCoin();
-        //coin.x = x;
-        //coin.y = y;
-
-        
-        //stage.addChild(coin);
     }
 
 

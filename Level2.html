@@ -54,14 +54,14 @@ body
         var ball;
         var myObstacle;
 
-                     //////////////////////Enemy variable
+     //////////////////////Enemy variable
      var enemy;
     var direction = true;
     var counter = 0;
 
     /////////////////////////
 
-        ///////////////////////////////Varibles For Score
+///////////////////////////////Varibles For Score/////////////////////////
         var score = 0;
         var lives = 3;
         var scoreText;
@@ -158,17 +158,13 @@ body
                 }
                 doubleJump = false;
             }
-               // var a= knightTemplate.y;
-                //createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
-
-                //createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
             }
-//////////////////////////Game Over
+//////////////////////////Game Over//////////////
 			if(lives<=0){
 				location.href ="GameOver.html";
 				Lives = 3;
 			}
-/////////////////////////////////////
+///////////////////////////////////////////////
 
             if(keyboardMoveLeft)
             {
@@ -182,42 +178,13 @@ body
             }
 
 
-            if(!keyboardMoveRight)
-            {
-                
-                //grant.gotoAndPlay(run);
-                //grant = new createjs.Sprite(spriteSheet, "run");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
-
-                //grant = new createjs.Sprite(spriteSheet);
-		        
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay("sit");
-			    //stage.update();
-
-                //grant.SpriteSheet(SpriteSheet,"run");
-                
-            }
 
             if(keyboardMoveRight)
             {
 
                 grant.scaleX = 1;
-
-                //grant.gotoAndPlay("run");
                 knightTemplate.x += 20;
                 grant.x = grant.x +20;
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay(run);
-               // grant = new createjs.Sprite(spriteSheet, "sit");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
-               // grant.gotoAndStop("sit");
-               
-			    //stage.update();
             }
 
             if(keyboardMoveUp)
@@ -257,7 +224,6 @@ body
                 
             }
 
-            //tempPlat10.alpha = 0.2;
             
             var pt = grant.localToLocal(0,128,leftPlat1);
             var pt1 = grant.localToLocal(0,128,leftPlat2); 
@@ -386,7 +352,7 @@ body
         coin6.x=null;
     }
       
-            
+     
 
             //Enemy hit test
     var pt18 = grant.localToLocal(180, 120, enemy);
@@ -418,15 +384,7 @@ body
     }
     if(pt18.y == 147 )
    {
-       /*if(!isActivated)
-       {
-        enemyAttackImage();
-    enemy = new createjs.Sprite(spriteSheetEnemy2,"attack");
-    isActivated = true;
-       }
-       */
        isPlay = false;
-       //enemy.scaleX = -1;
        if(grant.x > enemy.x)
        {
         enemy.scaleX = 1;
@@ -437,31 +395,6 @@ body
        }
 
    }
-
-            //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
-
-           /*  var pt4 = grant.localToLocal(0,128,tempPlat14);
-
-            
-
-            var pt5 = grant.localToLocal(0,128,tempPlat17);
-            var pt6 = grant.localToLocal(0,128,tempPlat18);
-
-            var pt7 = grant.localToLocal(0,128,ball);
-            var pt8 = grant.localToLocal(0,128,tempPlat2);
-            var pt9 = grant.localToLocal(0,128,tempPlat3); */
-
-           
-
-/*             if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
-            {
-                grant.y = tempPlat17.y - 128;
-            }
-
-            if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
-            {
-                grant.y = tempPlat2.y - 128;
-            } */
 
             
             var url_string = window.location.href;
@@ -475,6 +408,14 @@ body
                 lives = parseInt(livesVal, 10) ;
                 updateStatusLine();
             }
+
+
+            var pt19 = grant.localToLocal(0, 64, finishSign);
+
+if(finishSign.hitTest(pt19.x, pt19.y))
+{
+    location.href = "Level3.html?score="+score+"&lives="+lives;
+}
             
         }
 
@@ -482,28 +423,6 @@ body
 
  function init()
  {
-     //CallLoader Bar
-   // initLoader()
-   
-    ////////////
-
-
-    ///////////////////////////////This par is for save the store in the localstore of the browser
-    /*if(typeof(Storage) !=="undefined")
-            {
-                if(localStorage.HighScore==undefined)
-                {
-                    localStorage.HighScore = 0;
-                }
-                HighScore = localStorage.HighScore;
-
-            }
-            else
-            {
-                HighScore = 0;
-
-            }*/
-//////////////////////////////////////////////
 
 
      stage = new createjs.Stage("testCanvas"); 
@@ -520,14 +439,17 @@ body
      grant.y = 155;
      stage.addChild(grant);
 
-     //grant.setBounds(grant.x,grant.y,grant.width,grant.height);
+     var finish = new Image();
+        finish.src = 'images/Sign_2.png';
+        finishSign = new createjs.Bitmap(finish);
+        finishSign.x = 1430;
+        finishSign.y = 220;
+        stage.addChild(finishSign);
 
 
-     //createjs.Touch.enable(stage);
      createjs.Ticker.setFPS(10);
      createjs.Ticker.addEventListener("tick", tick);
      
-     //stage.addEventListener("stagemousedown", handleJumpStart);
 
      obstacle();
      drawLevel2Title();
@@ -563,15 +485,8 @@ body
  myObstacle.x = i;
  myObstacle.y = j;
    
-   //stage.addChild(myObstacle);
  } 
  }
- //myObstacle = new createjs.Shape();
- //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
- //myObstacle.x = 540;
- //myObstacle.y = 100;
-   //myObstacle = new component(10, 200, "green", 300, 120); 
-   //stage.addChild(myObstacle);
  }
     
  function playCoinSound()
@@ -818,7 +733,6 @@ body
         tempPlat8.x = tempPlat6.x;
         tempPlat8.y = yVal + 128;
 
-       // tempPlat9 = new createjs.Bitmap()
 
         // loop for middle pillar 
         var xVal = 800;
@@ -851,8 +765,6 @@ body
         tempPlat11.x = 350;
         tempPlat11.y = 300;
         
-        //Set bounds for tempPlat11
-        //tempPlat11.setBounds(tempPlat11.x,tempPlat11.y,tempPlat11.width,tempPlat11.height);
 
         tempPlat12 = new createjs.Bitmap(platJung15);
         tempPlat12.x = tempPlat11.x + 128;
@@ -1020,18 +932,6 @@ body
         stage.update();
     }
 
-    // function createKnight()
-    //     {
-
-    //        knight = new Image();
-    //        knight.src = 'img/Knight/Knight1n.png';
-    //        var bitmap = new createjs.Bitmap(knight);
-    //        knight.x = 500;
-    //        knight.y = 0;
-    //        stage.addChild(bitmap);
-
-    //     }
-
 
     function knightimage() {
 
@@ -1061,7 +961,7 @@ function crearScoreText()
             scoreText.x = stage.canvas.width -900;
             stage.addChild(scoreText);
             console.log("fsfs");
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+            scoreText.text = "Score: " + score + " / Lives: " + lives;
         }
 
         function addToScore(points)
@@ -1073,7 +973,7 @@ function crearScoreText()
         //function to show score
         function updateStatusLine()
         {
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+            scoreText.text = "Score: " + score + " / Lives: " + lives;
 
         }
 

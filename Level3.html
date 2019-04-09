@@ -82,6 +82,7 @@ body
     var doubleJump = false;
     var isPlay = true;
     var isLeft;
+    var scoreVal = 0;
 
         function tick()
         {
@@ -158,10 +159,6 @@ body
                 }
                 doubleJump = false;
             }
-               // var a= knightTemplate.y;
-                //createjs.Tween.get(knightTemplate).to({y:100},knightTemplate.y,createjs.Ease.sineIn).to({y:ball.y - 100},1000,createjs.Ease.sineOut);
-
-                //createjs.Tween.get(grant).to({y:50},grant.y,createjs.Ease.sineIn).to({y:155},1000,createjs.Ease.sineOut);
             }
 //////////////////////////Game Over
 			if(lives<=0){
@@ -181,43 +178,13 @@ body
                 
             }
 
-
-            if(!keyboardMoveRight)
-            {
-                
-                //grant.gotoAndPlay(run);
-                //grant = new createjs.Sprite(spriteSheet, "run");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
-
-                //grant = new createjs.Sprite(spriteSheet);
-		        
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay("sit");
-			    //stage.update();
-
-                //grant.SpriteSheet(SpriteSheet,"run");
-                
-            }
-
             if(keyboardMoveRight)
             {
 
                 grant.scaleX = 1;
 
-                //grant.gotoAndPlay("run");
                 knightTemplate.x += 20;
                 grant.x = grant.x +20;
-                //grant.gotoAndPlay("run");
-                //grant.gotoAndPlay(run);
-               // grant = new createjs.Sprite(spriteSheet, "sit");
-                //grant.x = stage.canvas.width / 2;
-			    //grant.y = 200;
-			    //stage.addChild(grant);
-               // grant.gotoAndStop("sit");
-               
-			    //stage.update();
             }
 
             if(keyboardMoveUp)
@@ -437,32 +404,24 @@ var pt18 = grant.localToLocal(180, 120, enemy);
 
    }
 
-            
-
-            //document.getElementById("testCol").innerHTML = checkIntersection(grant, tempPlat11);
-
-           /*  var pt4 = grant.localToLocal(0,128,tempPlat14);
-
-            
-
-            var pt5 = grant.localToLocal(0,128,tempPlat17);
-            var pt6 = grant.localToLocal(0,128,tempPlat18);
-
-            var pt7 = grant.localToLocal(0,128,ball);
-            var pt8 = grant.localToLocal(0,128,tempPlat2);
-            var pt9 = grant.localToLocal(0,128,tempPlat3); */
-
-           
-
-/*             if(tempPlat17.hitTest(pt5.x, pt5.y)||tempPlat18.hitTest(pt6.x, pt6.y))
+   var url_string = window.location.href;
+            var url = new URL(url_string);
+            scoreVal = url.searchParams.get("score");
+            var livesVal = url.searchParams.get("lives");
+            if(score==0)
             {
-                grant.y = tempPlat17.y - 128;
+                
+                score = score + parseInt(scoreVal, 10) ;
+                lives = parseInt(livesVal, 10) ;
+                updateStatusLine();
             }
 
-            if(ball.hitTest(pt7.x, pt7.y)||tempPlat2.hitTest(pt8.x, pt8.y)||tempPlat3.hitTest(pt9.x, pt9.y))
-            {
-                grant.y = tempPlat2.y - 128;
-            } */
+            var pt19 = grant.localToLocal(0, 120, finishSign);
+
+if(finishSign.hitTest(pt19.x, pt19.y))
+{
+    location.href = "win.html?score="+score;
+}
 
         }
 
@@ -470,28 +429,7 @@ var pt18 = grant.localToLocal(180, 120, enemy);
 
  function init()
  {
-     //CallLoader Bar
-   // initLoader()
-   
-    ////////////
 
-
-    ///////////////////////////////This par is for save the store in the localstore of the browser
-    /*if(typeof(Storage) !=="undefined")
-            {
-                if(localStorage.HighScore==undefined)
-                {
-                    localStorage.HighScore = 0;
-                }
-                HighScore = localStorage.HighScore;
-
-            }
-            else
-            {
-                HighScore = 0;
-
-            }*/
-//////////////////////////////////////////////
 
 
      stage = new createjs.Stage("testCanvas"); 
@@ -509,14 +447,18 @@ var pt18 = grant.localToLocal(180, 120, enemy);
      grant.y = 155;
      stage.addChild(grant);
 
-     //grant.setBounds(grant.x,grant.y,grant.width,grant.height);
+     var finish = new Image();
+        finish.src = 'images/Sign_2.png';
+        finishSign = new createjs.Bitmap(finish);
+        finishSign.x = 1430;
+        finishSign.y = 440;
+        stage.addChild(finishSign);
 
 
      //createjs.Touch.enable(stage);
      createjs.Ticker.setFPS(10);
      createjs.Ticker.addEventListener("tick", tick);
      
-     //stage.addEventListener("stagemousedown", handleJumpStart);
 
      obstacle();
      drawTitle();
@@ -551,15 +493,8 @@ var pt18 = grant.localToLocal(180, 120, enemy);
  myObstacle.x = i;
  myObstacle.y = j;
    
-   //stage.addChild(myObstacle);
  } 
  }
- //myObstacle = new createjs.Shape();
- //myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
- //myObstacle.x = 540;
- //myObstacle.y = 100;
-   //myObstacle = new component(10, 200, "green", 300, 120); 
-   //stage.addChild(myObstacle);
  }
     
  function playCoinSound()
@@ -851,10 +786,6 @@ var pt18 = grant.localToLocal(180, 120, enemy);
         tempPlat13.y = tempPlat11.y - 130;
         
 
-        
-        //To play the background music
-        //var audio = new Audio('M-GameBG.ogg');
-        //audio.play();
 
         // Create a single item to load.
 		src = "sound/M-GameBG.ogg";
@@ -1008,17 +939,6 @@ var pt18 = grant.localToLocal(180, 120, enemy);
         stage.update();
     }
 
-    // function createKnight()
-    //     {
-
-    //        knight = new Image();
-    //        knight.src = 'img/Knight/Knight1n.png';
-    //        var bitmap = new createjs.Bitmap(knight);
-    //        knight.x = 500;
-    //        knight.y = 0;
-    //        stage.addChild(bitmap);
-
-    //     }
 
 
     function knightimage() {
@@ -1049,7 +969,7 @@ function crearScoreText()
             scoreText.x = stage.canvas.width -900;
             stage.addChild(scoreText);
             console.log("fsfs");
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+            scoreText.text = "Score: " + score + " / Lives: " + lives;
         }
 
         function addToScore(points)
@@ -1061,7 +981,7 @@ function crearScoreText()
         //function to show score
         function updateStatusLine()
         {
-            scoreText.text = "Score: " + score + " / Lives: " + lives+ " / High Score: "+HighScore;
+            scoreText.text = "Score: " + score + " / Lives: " + lives;
 
         }
 
