@@ -389,7 +389,7 @@ canvas
 
 
         stage = new createjs.Stage("testCanvas");
-        
+        createjs.Touch.enable(stage);
         knightimage();
 
         grant = new createjs.Sprite(spriteSheet, "sit");
