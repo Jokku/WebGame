@@ -229,7 +229,7 @@ game.playerMoveRight();
     }
 
     var pt13 = grant.localToLocal(0, 50, coin2  );
-     if(coin3.hitTest(pt13.x, pt13.y))
+     if(coin2.hitTest(pt13.x, pt13.y))
     {
         playCoinSound();
         stage.removeChild(coin2);
@@ -239,7 +239,7 @@ game.playerMoveRight();
         coin2.x=null;
     }
     var pt14 = grant.localToLocal(0, 50, coin3);
-     if(coin4.hitTest(pt14.x, pt14.y))
+     if(coin3.hitTest(pt14.x, pt14.y))
     {
         playCoinSound();
         stage.removeChild(coin3);
@@ -248,8 +248,8 @@ game.playerMoveRight();
         coin3.y=null;
         coin3.x=null;
     }
-    var pt15 = grant.localToLocal(0, 100, coin4  );
-     if(coin5.hitTest(pt15.x, pt15.y))
+    var pt15 = grant.localToLocal(0, 80, coin4  );
+     if(coin4.hitTest(pt15.x, pt15.y))
     {
         playCoinSound();
         stage.removeChild(coin4);
@@ -323,6 +323,13 @@ var pt18 = grant.localToLocal(180, 120, enemy);
 
    }
 
+   if(pt18.y != 147 )
+   {
+       isPlay = true;
+   }
+
+
+
    var url_string = window.location.href;
             var url = new URL(url_string);
             scoreVal = url.searchParams.get("score");
@@ -342,6 +349,29 @@ if(finishSign.hitTest(pt19.x, pt19.y))
     location.href = "win.html?score="+score;
 }
 
+var pt20 = grant.localToLocal(0, 128, tempPlat11);
+            var pt21 = grant.localToLocal(0, 128, tempPlat12);
+            if (tempPlat11.hitTest(pt20.x, pt10.y) || (tempPlat12.hitTest(pt21.x, pt11.y))) {
+                grant.y = tempPlat11.y - 128;
+                onGround = true;
+                doubleJump = false;
+            }
+
+            var pt22 = grant.localToLocal(0, 128, invisPlat1);
+            var pt23 = grant.localToLocal(0, 128, invisPlat2);
+            if (invisPlat1.hitTest(pt22.x, pt10.y) || (invisPlat2.hitTest(pt23.x, pt11.y))) {
+                grant.y = invisPlat1.y - 128;
+                onGround = true;
+                doubleJump = false;
+            }
+
+            var pt24 = grant.localToLocal(0, 128, tempPlat6);
+            var pt25 = grant.localToLocal(0, 128, tempPlat7);
+            if (tempPlat6.hitTest(pt24.x, pt10.y) || (tempPlat7.hitTest(pt25.x, pt11.y))) {
+                grant.y = tempPlat6.y - 128;
+                onGround = true;
+                doubleJump = false;
+            }
         }
 
 
@@ -431,7 +461,7 @@ if(finishSign.hitTest(pt19.x, pt19.y))
         coin3.y = 440;
 
         coin4 = new GreenCoin(); //5th coin from the right
-        coin4.x = 525;
+        coin4.x = 625;
         coin4.y = 250;
 
         coin5 = new GreenCoin(); //  4th  coin from right
@@ -643,6 +673,19 @@ if(finishSign.hitTest(pt19.x, pt19.y))
         // loop for middle pillar 
         var xVal = 500;
         var yval = tempPlat6.y;
+
+        invisPlat1 = new createjs.Bitmap(platJung05);
+            invisPlat1.x = xVal;
+            invisPlat1.y = 300;
+            stage.addChild(invisPlat1);
+            xVal = xVal + 128;
+            invisPlat2 = new createjs.Bitmap(platJung05);
+            invisPlat2.x = xVal;
+            invisPlat2.y = 300;
+            stage.addChild(invisPlat2);
+
+        xVal = 500;
+        yval = tempPlat6.y;    
         for(i=0; i<2;i++)
         {
             tempbase = new createjs.Bitmap(platJung05);
