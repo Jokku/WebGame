@@ -7,43 +7,47 @@
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+    <script src="GameController.js"></script>
 
     <script src="coins.js"></script>
 
     <style>
-        body
-{   
-    margin: 0;
-    padding:15px;
-    background-color:lightslategray;     
-}
+        body {
+            margin: 0;
+            padding: 15px;
+            background-color: lightslategray;
+        }
 
-canvas
-{
-    border: solid 2px #000;
-    background-color: #fff;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0px;
-    padding-right: 0px;
-    background-image: url("img/bg_jungle.png");
-    background-repeat: no-repeat;
-    position: relative;
-    top: 50px;
-    background-size:120%;
-    max-height: 800px;
-}
+        canvas {
+            border: solid 2px #000;
+            background-color: #fff;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 0px;
+            padding-right: 0px;
+            background-image: url("img/bg_jungle.png");
+            background-repeat: no-repeat;
+            position: relative;
+            top: 50px;
+            background-size: 120%;
+            max-height: 800px;
+        }
     </style>
 </head>
 
 <!-- Body tag calls the init method wich initializes the stage -->
+
 <body onload="init();">
     <h1 id="testData" hidden="hidden">False</h1>
     <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 </body>
 
 <script>
+    //Create Game Controller object
+    game = new GameController();
+    game.playerLoad();
+
     var test = true;
     const BALL_RADIOUS = 20;
     const KEYCODE_LEFT = 37;
@@ -57,7 +61,6 @@ canvas
     var keyboardMoveUp = false;
     var keyboardSpace = false;
     var ball;
-    var myObstacle;
 
 
 
@@ -85,7 +88,7 @@ canvas
 
         stage.update();
 
-       
+
 
         //Collision and gravity testing
         grant.y = grant.y + gravity;
@@ -94,98 +97,23 @@ canvas
         collision = tempPlat10.y;
         // Here is the problem right here!
 
-        console.log(grant.y);
+        //Discount lives if knight Fall
+        game.playerFall();
 
-        /////////////////////////////////Discount lives if knight Fall
-        if (grant.y > 900) 
-        {
-            lives -= 1;
-            init();
-        }
-        //////////////////////////////////////////////////////////////// 
+        //Method for Jump
+        game.playerJump();
 
 
-        if (keyboardSpace) {
-           
-            if(onGround)
-            {
-                for(var i=0;i<500;i++)
-                {
-                    grant.y = grant.y - 0.5;
-                }
-                //grant.y = grant.y - 355;
-                onGround = false;
-                doubleJump = true;
-            }
-            else if(doubleJump)
-            {
-                //grant.y = grant.y - 355;
-                for(var i=0;i<500;i++)
-                {
-                    grant.y = grant.y - 0.5;
-                }
-                doubleJump = false;
-            }
-            
-        }
-        //////////////////////////Game Over///////////////
-        if (lives <= 0) {
-            location.href = "GameOver.html";
-            Lives = 3;
-        }
-        /////////////////////////////////////////////////
+        //Game Over
+        game.gameOver();
 
-        if (keyboardMoveLeft) {
+        //For Left Player Movement
+        game.playerMoveLeft();
 
-            knightTemplate.x -= 20;
-
-            grant.scaleX = -1;
-
-            grant.x = grant.x - 20;
-
-        }
+        //For Right Player Movement
+        game.playerMoveRight();
 
 
-
-
-        if (keyboardMoveRight) {
-
-            grant.scaleX = 1;
-            knightTemplate.x += 20;
-            grant.x = grant.x + 20;
-        }
-
-        if (keyboardMoveUp) {
-
-            knightTemplate.y -= 20;
-
-        }
-        if (keyboardMoveDown) {
-
-            knightTemplate.y += 20;
-
-        }
-
-
-        if (knightTemplate.x < -5) {
-
-            knightTemplate.x = -5;
-        }
-        if (knightTemplate.x > stage.canvas.width - BALL_RADIOUS * 5) {
-
-            knightTemplate.x = stage.canvas.width - BALL_RADIOUS * 5;
-        }
-
-
-        if (knightTemplate.y > stage.canvas.height - BALL_RADIOUS * 2) {
-
-            knightTemplate.y = stage.canvas.height - BALL_RADIOUS * 2;
-        }
-        if (knightTemplate.y < 0) {
-            knightTemplate.y = 0;
-
-        }
-        
         var pt = grant.localToLocal(0, 128, tempPlat10);
         var pt1 = grant.localToLocal(0, 128, tempPlat11);
         var pt2 = grant.localToLocal(0, 128, tempPlat12);
@@ -201,7 +129,7 @@ canvas
         var pt8 = grant.localToLocal(0, 128, tempPlat2);
         var pt9 = grant.localToLocal(0, 128, tempPlat3);
 
-        
+
 
 
         if (tempPlat10.hitTest(pt.x, pt.y) || tempPlat11.hitTest(pt1.x, pt1.y) || tempPlat12.hitTest(pt2.x, pt2.y) ||
@@ -224,108 +152,96 @@ canvas
         }
 
 
-        
+
         var pt10 = grant.localToLocal(0, 128, coin);
 
-        if(coin.hitTest(pt10.x, pt10.y))
-        {
-        
-            if(test)
-            {
+        if (coin.hitTest(pt10.x, pt10.y)) {
+
+            if (test) {
                 stage.removeChild(coin);
                 score = score + 10;
                 scoreText.text = "Score: " + score + " / Lives: " + lives + " / High Score: " + HighScore;
             }
 
             test = false;
-            
+
         }
-////Remove the coins////////////////////////////
-    var pt11 = grant.localToLocal(0, 50, coin1);
-    if(coin1.hitTest(pt11.x, pt11.y))
-    {
-        stage.removeChild(coin1);
-        addToScore(10);
-        pt11 = 0;
-        coin1.y=null;
-        coin1.x=null;
-    }
-    var pt12 = grant.localToLocal(0, 50, coin2);
-    if(coin2.hitTest(pt12.x, pt12.y))
-    {
-        stage.removeChild(coin2);
-        addToScore(10);        
-        pt12 = 0;
-        coin2.y=null;
-        coin2.x=null;
-    }
+        ////Remove the coins////////////////////////////
+        var pt11 = grant.localToLocal(0, 50, coin1);
+        if (coin1.hitTest(pt11.x, pt11.y)) {
+            stage.removeChild(coin1);
+            game.addToScore(10);
+            pt11 = 0;
+            coin1.y = null;
+            coin1.x = null;
+        }
+        var pt12 = grant.localToLocal(0, 50, coin2);
+        if (coin2.hitTest(pt12.x, pt12.y)) {
+            stage.removeChild(coin2);
+            game.addToScore(10);
+            pt12 = 0;
+            coin2.y = null;
+            coin2.x = null;
+        }
 
-    var pt13 = grant.localToLocal(0, 50, coin3  );
-     if(coin3.hitTest(pt13.x, pt13.y))
-    {
-        stage.removeChild(coin3);
-        addToScore(10);
-        pt13 = 0;
-        coin3.y=null;
-        coin3.x=null;
-    }
-    var pt14 = grant.localToLocal(0, 50, coin4);
-     if(coin4.hitTest(pt14.x, pt14.y))
-    {
-        stage.removeChild(coin4);
-        addToScore(10);
-        pt14 = 0;
-        coin4.y=null;
-        coin4.x=null;
-    }
-    var pt15 = grant.localToLocal(0, 100, coin5  );
-     if(coin5.hitTest(pt15.x, pt15.y))
-    {
-        stage.removeChild(coin5);
-        addToScore(10);
-        pt15 = 0;
-        coin5.y=null;
-        coin5.x=null;
-    }
-    ////////////////////////////////////////////////////////////
+        var pt13 = grant.localToLocal(0, 50, coin3);
+        if (coin3.hitTest(pt13.x, pt13.y)) {
+            stage.removeChild(coin3);
+            game.addToScore(10);
+            pt13 = 0;
+            coin3.y = null;
+            coin3.x = null;
+        }
+        var pt14 = grant.localToLocal(0, 50, coin4);
+        if (coin4.hitTest(pt14.x, pt14.y)) {
+            stage.removeChild(coin4);
+            game.addToScore(10);
+            pt14 = 0;
+            coin4.y = null;
+            coin4.x = null;
+        }
+        var pt15 = grant.localToLocal(0, 100, coin5);
+        if (coin5.hitTest(pt15.x, pt15.y)) {
+            stage.removeChild(coin5);
+            game.addToScore(10);
+            pt15 = 0;
+            coin5.y = null;
+            coin5.x = null;
+        }
+        ////////////////////////////////////////////////////////////
 
-    var pt12 = grant.localToLocal(0, 64, finishSign);
+        var pt12 = grant.localToLocal(0, 64, finishSign);
 
-    if(finishSign.hitTest(pt12.x, pt12.y))
-    {
-        location.href = "Level2.html?score="+score+"&lives="+lives;
-    }
+        if (finishSign.hitTest(pt12.x, pt12.y)) {
+            location.href = "Level2.html?score=" + score + "&lives=" + lives;
+        }
 
-    var pt13 = grant.localToLocal(0, 128, tempPlat5);
+        var pt13 = grant.localToLocal(0, 128, tempPlat5);
 
-    if(tempPlat5.hitTest(pt13.x, pt13.y))
-    {
-        grant.y = tempPlat5.y - 128;
-        onGround = true;
-        doubleJump = false;
-    }
+        if (tempPlat5.hitTest(pt13.x, pt13.y)) {
+            grant.y = tempPlat5.y - 128;
+            onGround = true;
+            doubleJump = false;
+        }
 
-    var pt14 = grant.localToLocal(0, 128, tempPlat6);
-    var pt15 = grant.localToLocal(0, 128, tempPlat7);
-    var pt16 = grant.localToLocal(0, 128, tempPlat15);
-    var pt17 = grant.localToLocal(0, 128, tempPlat16);
-    if(tempPlat6.hitTest(pt14.x, pt14.y) || tempPlat7.hitTest(pt15.x, pt15.y) || tempPlat15.hitTest(pt16.x, pt16.y) || tempPlat16.hitTest(pt17.x, pt17.y))
-    {
-        grant.y = tempPlat6.y - 128;
-        onGround = true;
-        doubleJump = false;
-    }
-
-
-
+        var pt14 = grant.localToLocal(0, 128, tempPlat6);
+        var pt15 = grant.localToLocal(0, 128, tempPlat7);
+        var pt16 = grant.localToLocal(0, 128, tempPlat15);
+        var pt17 = grant.localToLocal(0, 128, tempPlat16);
+        if (tempPlat6.hitTest(pt14.x, pt14.y) || tempPlat7.hitTest(pt15.x, pt15.y) || tempPlat15.hitTest(pt16.x, pt16.y) || tempPlat16.hitTest(pt17.x, pt17.y)) {
+            grant.y = tempPlat6.y - 128;
+            onGround = true;
+            doubleJump = false;
+        }
     }
 
     function init() {
-       
+
 
         stage = new createjs.Stage("testCanvas");
         //createjs.Touch.enable(stage);
-        knightimage();
+
+
 
         grant = new createjs.Sprite(spriteSheet, "sit");
         grant.x = 230;
@@ -338,21 +254,19 @@ canvas
         finishSign.x = 1430;
         finishSign.y = 220;
         stage.addChild(finishSign);
-        
+
 
 
         //createjs.Touch.enable(stage);
         createjs.Ticker.setFPS(10);
         createjs.Ticker.addEventListener("tick", tick);
 
-        //stage.addEventListener("stagemousedown", handleJumpStart);
-
-        obstacle();
-
         drawTitle();
-        crearimage();
 
-        crearScoreText();
+        createObjects();
+
+        //create the score text
+        game.createScoreText();
 
         stage.update();
         window.onkeyup = keyUpHandler;
@@ -363,28 +277,19 @@ canvas
         stage.canvas.height = window.innerHeight;
     }
 
-    function handleJumpStart() {
-        grant = new createjs.Sprite(spriteSheet);
-        grant.gotoAndPlay("jump");
+    //To draw the title
+    function drawTitle() {
+        var imgPath = 'images/level1.png';
+        title = new createjs.Bitmap(imgPath);
+        title.x = 500;
+        title.y = -200;
+        stage.addChild(title);
+        stage.update();
+        setTimeout(titleMove, 100);
     }
 
-
-    function obstacle() {
-
-        for (var i = 100; i <= 1000; i += 5) {
-            for (var j = 100; j <= 1000; j += 200) {
-                myObstacle = new createjs.Shape();
-                myObstacle.graphics.beginFill("Red").drawCircle(50, 100, BALL_RADIOUS);
-                myObstacle.x = i;
-                myObstacle.y = j;
-
-            }
-        }
-    }
-
-
-    function crearimage() {
-///////Create Coins/////////////
+    function createObjects() {
+        ///////Create Coins/////////////
         coin1 = new GreenCoin();
         coin1.x = 820;
         coin1.y = 250;
@@ -405,11 +310,11 @@ canvas
         coin5.x = 500;
         coin5.y = 250;
 
-    stage.addChild(coin1,coin2,coin3,coin4,coin5);
-       
-/////////////////////////////////////////////////////
+        stage.addChild(coin1, coin2, coin3, coin4, coin5);
 
-       addCoins(0 ,0);
+        /////////////////////////////////////////////////////
+
+        addCoins(0, 0);
 
         var platform1 = new Image();
         platform1.src = 'img/jungle_pack_19.png';
@@ -603,72 +508,14 @@ canvas
         }
     }
 
-
+    //Calling the Key Down Handler
     function keyDownHandler(e) {
-        switch (e.keyCode) {
-            case KEYCODE_LEFT:
-                {
-                    keyboardMoveLeft = true;
-                    if (document.getElementById("testData").innerHTML == "False") {
-                        grant.gotoAndPlay("run");
-                    }
-                    document.getElementById("testData").innerHTML = "True";
-                    break;
-                }
-            case KEYCODE_RIGHT:
-                {
-
-                    keyboardMoveRight = true;
-                    if (document.getElementById("testData").innerHTML == "False") {
-                        grant.gotoAndPlay("run");
-                    }
-                    document.getElementById("testData").innerHTML = "True";
-                    break;
-
-                }
-            case KEYCODE_UP: keyboardMoveUp = true; break;
-            case KEYCODE_DOWN: keyboardMoveDown = true; break;
-            case SPACEBAR:
-                {
-                    keyboardSpace = true;
-                    grant.gotoAndPlay("jump");
-                    break;
-                }  
-
-            //foranim
-            case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
-        }
+        game.keyDownHandler(e);
     }
 
+    //Invoking the Key Up Handler
     function keyUpHandler(e) {
-
-        switch (e.keyCode) {
-
-            case KEYCODE_LEFT:
-                {
-                    keyboardMoveLeft = false;
-                    if (document.getElementById("testData").innerHTML == "True") {
-                        grant.gotoAndPlay("sit");
-                    }
-                    document.getElementById("testData").innerHTML = "False";
-                    break;
-                }
-            case KEYCODE_RIGHT:
-                {
-
-                    keyboardMoveRight = false;
-                    if (document.getElementById("testData").innerHTML == "True") {
-                        grant.gotoAndPlay("sit");
-                    }
-                    document.getElementById("testData").innerHTML = "False";
-                    break;
-                }
-            case KEYCODE_UP: keyboardMoveUp = false; break;
-            case KEYCODE_DOWN: keyboardMoveDown = false; break;
-            case SPACEBAR: keyboardSpace = false; break;
-            //foranim
-            case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
-        }
+        game.keyUpHandler(e);
     }
 
 
@@ -676,125 +523,23 @@ canvas
         soundInstance = createjs.Sound.play(event.src);  // start playing the sound we just loaded, storing the playing instance
     }
 
-    function drawTitle() {
-        var imgPath = 'images/level1.png';
-        title = new createjs.Bitmap(imgPath);
-        title.x = 500;
-        title.y = -200;
-        stage.addChild(title);
-        stage.update();
-        setTimeout(titleMove, 100);
-    }
+
 
     function titleMove() {
-        createjs.Tween.get(title).to({y:100},3000).call(titleGone,[title],this);
+        createjs.Tween.get(title).to({ y: 100 }, 3000).call(titleGone, [title], this);
     }
-    
-    function titleGone(title){
+
+    function titleGone(title) {
         stage.removeChild(title);
     }
 
-	
-    window.addEventListener("click", function(event) { 
+
+    window.addEventListener("click", function (event) {
         grant.gotoAndPlay("attack");
-        //alert(grant.currentAnimation);
     })
 
-
-    ///ForLoader///
-
-    function initLoader() {
-        setupStage();
-        buildLoaderBar();
-        startLoad();
-    }
-    function setupStage() {
-        stage = new createjs.Stage(document.getElementById('canvas'));
-        createjs.Ticker.addEventListener("tick", runGame);
-        createjs.Ticker.setFPS(60);
-    }
-    function buildLoaderBar() {
-        loaderBar = new createjs.Shape();
-        loaderBar.x = loaderBar.y = 100;
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke("#000");
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        stage.addChild(loaderBar);
-    }
-    function updateLoaderBar() {
-        loaderBar.graphics.beginFill('#00ff00');
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH * percentLoaded, 40);
-        loaderBar.graphics.endFill();
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke("#000");
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        loaderBar.graphics.endStroke();
-    }
-    function startLoad() {
-        loadInterval = setInterval(updateLoad, 50);
-    }
-    function updateLoad() {
-        percentLoaded += .005;
-        updateLoaderBar();
-        if (percentLoaded >= 1) {
-            clearInterval(loadInterval);
-            stage.removeChild(loaderBar);
-        }
-    }
-    function runGame(e) {
-        stage.update();
-    }
-
-
-
-    function knightimage() {
-
-
-        spriteSheet = new createjs.SpriteSheet({
-            framerate: 5,
-            "images": ["img/prueba4.6.png"],
-            "frames": { "regX": 75, "height": 148.6, "regY": 0, "width": 291, "spacing": 2, "count": 100 },
-            "animations": {
-                sit: [1, 1, "sit"],
-                run: [0, 3, "run"],
-                jump: [0, 0, "sit"],
-                attack: [4,10, "sit"]
-            }
-        });
-
-
-    }
-
-
-    ///////////////////////////////////////////these method are for the Score and text of lives
-
-    function crearScoreText() {
-        scoreText = new createjs.Text("", "50px Arial", "#423425");
-        scoreText.y = stage.canvas.height - 900;
-        scoreText.x = stage.canvas.width - 900;
-        stage.addChild(scoreText);
-        console.log("fsfs");
-        scoreText.text = "Score: " + score + " / Lives: " + lives;
-    }
-
-    function addToScore(points) {
-        score += points;
-        updateStatusLine();
-
-    }
-    //function to show score
-    function updateStatusLine() {
-        scoreText.text = "Score: " + score + " / Lives: " + lives;
-
-    }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-///Loader Ends///
-
-//Method to add coin
-function addCoins(x, y) {
+    //Method to add coin
+    function addCoins(x, y) {
         coin = new GreenCoin();
     }
 

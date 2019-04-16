@@ -33,10 +33,21 @@
 }
 
 </style>
-</head>
-<body bgcolor="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
-    <h1 style="position:relative;left:45%; top:800px;">Score: </h1>
+<script>
+	function loadScore()
+	{
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		scoreVal = url.searchParams.get("score");
+		document.getElementById("score").innerHTML = "Score: "+scoreVal;
+	}
+
+</script>
+</head>
+<body bgcolor="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="loadScore();" >
+
+    <h1 id="score" style="position:relative;left:45%; top:800px;">Score: </h1>
 <!-- End Save for Web Slices -->
 </body>
 </html>

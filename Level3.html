@@ -6,7 +6,8 @@
     <script src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
-	<script src="coins.js"></script>
+    <script src="coins.js"></script>
+    <script src="GameController.js"></script>
 <style>
 body
             {
@@ -38,6 +39,11 @@ body
 
 <canvas id="testCanvas" width="1500px" height="970px"></canvas>
 <script>
+
+        //Create Game Controller object
+        game = new GameController();
+        game.playerLoad();
+
         // sound for Coin
         soundsrc = "sound/coinSound.mp3";
         const BALL_RADIOUS = 20;
@@ -128,101 +134,22 @@ body
 
        console.log(grant.y);
 
-/////////////////////////////////Discount lives if knight Fall
-       		if(grant.y > 900){
 
-       			//lives -= 1;
-       			init();
+        //Discount lives if knight Fall
+        game.playerFall();
 
-       		}
-//////////////////////////////////////////////////////////////// 
+//Method for Jump
+game.playerJump();
 
-            
-            if(keyboardSpace)
-            {
-                if(onGround)
-            {
-                for(var i=0;i<500;i++)
-                {
-                    grant.y = grant.y - 0.5;
-                }
-                //grant.y = grant.y - 355;
-                onGround = false;
-                doubleJump = true;
-            }
-            else if(doubleJump)
-            {
-                //grant.y = grant.y - 355;
-                for(var i=0;i<500;i++)
-                {
-                    grant.y = grant.y - 0.5;
-                }
-                doubleJump = false;
-            }
-            }
-//////////////////////////Game Over
-			if(lives<=0){
-				location.href ="GameOver.html";
-				Lives = 3;
-			}
-/////////////////////////////////////
-
-            if(keyboardMoveLeft)
-            {
-  
-                knightTemplate.x -= 20;
-
-                grant.scaleX = -1;
-
-                grant.x = grant.x -20;
-                
-            }
-
-            if(keyboardMoveRight)
-            {
-
-                grant.scaleX = 1;
-
-                knightTemplate.x += 20;
-                grant.x = grant.x +20;
-            }
-
-            if(keyboardMoveUp)
-            {
-            
-                knightTemplate.y -= 20;
-
-            }
-            if(keyboardMoveDown)
-            {
-            
-                knightTemplate.y += 20;
-
-            }
+//Game Over
+game.gameOver();
 
 
-            if(knightTemplate.x<-5)
-            {
+//For Left Player Movement
+game.playerMoveLeft();
 
-                knightTemplate.x = -5;
-            }
-            if(knightTemplate.x>stage.canvas.width - BALL_RADIOUS*5)
-            {
-
-                knightTemplate.x = stage.canvas.width - BALL_RADIOUS*5;
-            }
-
-
-            if(knightTemplate.y>stage.canvas.height - BALL_RADIOUS*2)
-            {
-
-                knightTemplate.y = stage.canvas.height - BALL_RADIOUS*2;
-            }
-            if(knightTemplate.y<0 )
-            {
-                knightTemplate.y= 0;
-                
-            }
+//For Right Player Movement
+game.playerMoveRight();
 
             //tempPlat10.alpha = 0.2;
             
@@ -295,7 +222,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin1);
-        addToScore(10);        
+        game.addToScore(10);        
         pt12 = 0;
         coin1.y=null;
         coin1.x=null;
@@ -306,7 +233,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin2);
-        addToScore(10);
+        game.addToScore(10);
         pt13 = 0;
         coin2.y=null;
         coin2.x=null;
@@ -316,7 +243,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin3);
-        addToScore(10);
+        game.addToScore(10);
         pt14 = 0;
         coin3.y=null;
         coin3.x=null;
@@ -326,7 +253,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin4);
-        addToScore(10);
+        game.addToScore(10);
         pt15 = 0;
         coin4.y=null;
         coin4.x=null;
@@ -337,7 +264,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin5);
-        addToScore(10);
+        game.addToScore(10);
         pt16 = 0;
         coin5.y=null;
         coin5.x=null;
@@ -348,7 +275,7 @@ body
     {
         playCoinSound();
         stage.removeChild(coin6);
-        addToScore(10);
+        game.addToScore(10);
         pt17 = 0;
         coin6.y=null;
         coin6.x=null;
@@ -361,7 +288,7 @@ var pt18 = grant.localToLocal(180, 120, enemy);
         if(grant.currentAnimation == "attack")
         {
             stage.removeChild(enemy);
-            addToScore(20);
+            game.addToScore(20);
             pt18 = 0;
             enemy.y=null;
             enemy.x=null;
@@ -384,15 +311,7 @@ var pt18 = grant.localToLocal(180, 120, enemy);
     }
     if(pt18.y == 147 )
    {
-       /*if(!isActivated)
-       {
-        enemyAttackImage();
-    enemy = new createjs.Sprite(spriteSheetEnemy2,"attack");
-    isActivated = true;
-       }
-       */
        isPlay = false;
-       //enemy.scaleX = -1;
        if(grant.x > enemy.x)
        {
         enemy.scaleX = 1;
@@ -439,8 +358,7 @@ if(finishSign.hitTest(pt19.x, pt19.y))
         enemy.x = 1450;
         enemy.y = 645;
         stage.addChild(enemy);
-
-     knightimage();   
+ 
 
      grant = new createjs.Sprite(spriteSheet, "sit");
      grant.x = 230;
@@ -460,11 +378,10 @@ if(finishSign.hitTest(pt19.x, pt19.y))
      createjs.Ticker.addEventListener("tick", tick);
      
 
-     obstacle();
      drawTitle();
-     crearimage();
-
-     crearScoreText();
+     createObjects();
+    //create the score text
+    game.createScoreText();
   
 
      stage.update();
@@ -475,27 +392,7 @@ if(finishSign.hitTest(pt19.x, pt19.y))
      stage.canvas.height =window.innerHeight;
  }
 
- function handleJumpStart() {
-		grant = new createjs.Sprite(spriteSheet);
-		grant.gotoAndPlay("jump");
-	}
 
-
- function obstacle()
- {
-
- for(var i=100;i<=1000;i+=5)
- {
- for(var j=100;j<=1000;j+=200)
- {
- myObstacle = new createjs.Shape();
- myObstacle.graphics.beginFill("Red").drawCircle(50,100, BALL_RADIOUS);
- myObstacle.x = i;
- myObstacle.y = j;
-   
- } 
- }
- }
     
  function playCoinSound()
     {
@@ -519,7 +416,7 @@ if(finishSign.hitTest(pt19.x, pt19.y))
         stage.removeChild(title);
     }
 
-    function crearimage()
+    function createObjects()
     {
 		coin1 = new GreenCoin(); // 3rd coin on the right
         coin1.x = 875;
@@ -809,80 +706,17 @@ if(finishSign.hitTest(pt19.x, pt19.y))
     }
 
        
-        function keyDownHandler(e)
-        {
-         switch(e.keyCode)
-         {
-          case KEYCODE_LEFT:
-          {
-            keyboardMoveLeft = true;
-            if(document.getElementById("testData").innerHTML == "False")
-            {
-                grant.gotoAndPlay("run");
-            }
-            document.getElementById("testData").innerHTML = "True"; 
-            break;
-          }
-          case KEYCODE_RIGHT:
-          {
-            
-            keyboardMoveRight = true;
-            if(document.getElementById("testData").innerHTML == "False")
-            {
-                grant.gotoAndPlay("run");
-            }
-            document.getElementById("testData").innerHTML = "True"; 
-            break;
+  
 
-          } 
-          case KEYCODE_UP: keyboardMoveUp = true; break;
-          case KEYCODE_DOWN: keyboardMoveDown = true; break;
-          case SPACEBAR: 
-          {
-              keyboardSpace = true;
-              grant.gotoAndPlay("jump");  
-              break;
-          }
-
-          //foranim
-          case KEYCODE_RIGHT: keyboardMoveRightAnim = false; break;
-         }
+        //Calling the Key Down Handler
+        function keyDownHandler(e) {
+            game.keyDownHandler(e);
         }
 
-         function keyUpHandler(e)
-         {
-
-  switch(e.keyCode)
-         {
-
-          case KEYCODE_LEFT: 
-          {
-              keyboardMoveLeft = false;
-              if(document.getElementById("testData").innerHTML == "True")
-              {
-                grant.gotoAndPlay("sit");
-              }
-              document.getElementById("testData").innerHTML = "False";
-              break;
-          }
-          case KEYCODE_RIGHT: 
-          {
-             
-              keyboardMoveRight = false; 
-              if(document.getElementById("testData").innerHTML == "True")
-              {
-                grant.gotoAndPlay("sit");
-              }
-              document.getElementById("testData").innerHTML = "False";
-              break;
-          }
-          case KEYCODE_UP: keyboardMoveUp = false; break;
-          case KEYCODE_DOWN: keyboardMoveDown = false; break;
-          case SPACEBAR: keyboardSpace = false; break;
-          //foranim
-          case KEYCODE_RIGHT: keyboardMoveRightAnim = true; break;
-         }          
-         }
+        //Invoking the Key Up Handler
+        function keyUpHandler(e) {
+            game.keyUpHandler(e);
+        }
 
 
     function playSound(event) {
@@ -894,108 +728,8 @@ if(finishSign.hitTest(pt19.x, pt19.y))
         //alert(grant.currentAnimation);
     })
 
-
-    ///ForLoader///
-
-    function initLoader() {
-        setupStage();
-        buildLoaderBar();
-        startLoad();
-    }
-    function setupStage() {
-        stage = new createjs.Stage(document.getElementById('canvas'));
-        createjs.Ticker.addEventListener("tick", runGame);
-        createjs.Ticker.setFPS(60);
-    }
-    function buildLoaderBar() {
-        loaderBar = new createjs.Shape();
-        loaderBar.x = loaderBar.y = 100;
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke("#000");
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        stage.addChild(loaderBar);
-    }
-    function updateLoaderBar() {
-        loaderBar.graphics.beginFill('#00ff00');
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH * percentLoaded, 40);
-        loaderBar.graphics.endFill();
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke("#000");
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        loaderBar.graphics.endStroke();
-    }
-    function startLoad() {
-        loadInterval = setInterval(updateLoad, 50);
-    }
-    function updateLoad() {
-        percentLoaded += .005;
-        updateLoaderBar();
-        if (percentLoaded >= 1) {
-            clearInterval(loadInterval);
-            stage.removeChild(loaderBar);
-        }
-    }
-    function runGame(e) {
-        stage.update();
-    }
-
-
-
-    function knightimage() {
-
-
-spriteSheet = new createjs.SpriteSheet({
-    framerate: 5,
-    "images": ["img/prueba4.6.png"],
-    "frames": { "regX": 75, "height": 148.6, "regY": 0, "width": 291, "spacing": 2, "count": 100 },
-    "animations": {
-        sit: [1, 1, "sit"],
-        run: [0, 3, "run"],
-        jump: [0, 0, "sit"],
-        attack: [4,10, "sit"]
-    }
-});
-
-
-}
-
-
-///////////////////////////////////////////these method are for the Score and text of lives
-
-function crearScoreText()
-        {
-            scoreText = new createjs.Text("", "50px Arial", "#423425");
-            scoreText.y = stage.canvas.height -900;
-            scoreText.x = stage.canvas.width -900;
-            stage.addChild(scoreText);
-            console.log("fsfs");
-            scoreText.text = "Score: " + score + " / Lives: " + lives;
-        }
-
-        function addToScore(points)
-        {
-            score += points;
-            updateStatusLine();
-
-        }
-        //function to show score
-        function updateStatusLine()
-        {
-            scoreText.text = "Score: " + score + " / Lives: " + lives;
-
-        }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-    ///Loader Ends///
 	function addCoins(x, y) {
         coin = new GreenCoin();
-        //coin.x = x;
-        //coin.y = y;
-
-        
-        //stage.addChild(coin);
     }
 
     function enemyimage(){ 
@@ -1009,7 +743,6 @@ function crearScoreText()
         }
     });
     }
-
 
 
 </script>
