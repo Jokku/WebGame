@@ -48,6 +48,9 @@
     game = new GameController();
     game.playerLoad();
 
+    // sound for Coin
+    soundsrc = "sound/coinSound.mp3";
+    
     var test = true;
     const BALL_RADIOUS = 20;
     const KEYCODE_LEFT = 37;
@@ -169,6 +172,7 @@
         ////Remove the coins////////////////////////////
         var pt11 = grant.localToLocal(0, 50, coin1);
         if (coin1.hitTest(pt11.x, pt11.y)) {
+            playCoinSound();
             stage.removeChild(coin1);
             game.addToScore(10);
             pt11 = 0;
@@ -177,6 +181,7 @@
         }
         var pt12 = grant.localToLocal(0, 50, coin2);
         if (coin2.hitTest(pt12.x, pt12.y)) {
+            playCoinSound();
             stage.removeChild(coin2);
             game.addToScore(10);
             pt12 = 0;
@@ -186,6 +191,7 @@
 
         var pt13 = grant.localToLocal(0, 50, coin3);
         if (coin3.hitTest(pt13.x, pt13.y)) {
+            playCoinSound();
             stage.removeChild(coin3);
             game.addToScore(10);
             pt13 = 0;
@@ -194,6 +200,7 @@
         }
         var pt14 = grant.localToLocal(0, 50, coin4);
         if (coin4.hitTest(pt14.x, pt14.y)) {
+            playCoinSound();
             stage.removeChild(coin4);
             game.addToScore(10);
             pt14 = 0;
@@ -202,6 +209,7 @@
         }
         var pt15 = grant.localToLocal(0, 100, coin5);
         if (coin5.hitTest(pt15.x, pt15.y)) {
+            playCoinSound();
             stage.removeChild(coin5);
             game.addToScore(10);
             pt15 = 0;
@@ -276,6 +284,14 @@
         window.onmouseup = keyUpHandler;
         stage.canvas.height = window.innerHeight;
     }
+
+
+    function playCoinSound()
+    {
+        createjs.Sound.registerSound(soundsrc);
+        createjs.Sound.play(soundsrc);
+    }
+
 
     //To draw the title
     function drawTitle() {
